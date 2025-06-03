@@ -1,0 +1,89 @@
+import type { ReactNode } from "react"
+import { MobileNav } from "./mobile-nav"
+import { BottomNav } from "./bottom-nav"
+import { SkipLink } from "./accessibility/skip-link"
+import { Brain } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+
+interface ResponsiveLayoutProps {
+  children: ReactNode
+  title: string
+  user: {
+    name: string
+    avatar: string
+    level: string
+  }
+}
+
+export function ResponsiveLayout({ children, title, user }: ResponsiveLayoutProps) {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <SkipLink />
+
+      {/* 导航栏 */}
+      <nav
+        className="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40"
+        role="navigation"
+        aria-label="主导航"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-4">
+              <MobileNav user={user} />
+              <div className="flex items-center space-x-2">
+                <Brain className="h-6 w-6 text-indigo-600" aria-hidden="true" />
+                <h1 className="text-lg font-semibold text-gray-900 truncate max-w-[150px] sm:max-w-none">{title}</h1>
+              </div>
+            </div>
+            <div className="hidden md:flex items-center space-x-4" role="menubar">
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/" role="menuitem">
+                  首页
+                </Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/courses" role="menuitem">
+                  课程中心
+                </Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/exam" role="menuitem">
+                  练习测试
+                </Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/progress" role="menuitem">
+                  学习进度
+                </Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/team" role="menuitem">
+                  团队管理
+                </Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/profile" role="menuitem">
+                  我的资料
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* 主内容 */}
+      <main
+        id="main-content"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-20 md:pb-6"
+        role="main"
+        tabIndex={-1}
+      >
+        {children}
+      </main>
+
+      {/* 底部导航 - 确保在移动端显示 */}
+      <BottomNav />
+    </div>
+  )
+}

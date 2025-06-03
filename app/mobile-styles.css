@@ -1,0 +1,172 @@
+/* 移动端优化样式 */
+@media (max-width: 768px) {
+  /* 确保页面内容不被底部导航遮挡 */
+  body {
+    padding-bottom: 4rem; /* 64px for bottom nav */
+  }
+
+  /* 底部导航样式 */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  /* 安全区域适配 */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* 主内容区域底部间距 */
+  main {
+    padding-bottom: 5rem !important; /* 80px for bottom nav + padding */
+  }
+
+  /* 响应式布局调整 */
+  .responsive-layout {
+    padding-bottom: 4rem;
+  }
+
+  /* 卡片在移动端的优化 */
+  .mobile-card {
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* 触摸优化 */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* 文字大小调整 */
+  .mobile-text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .mobile-text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+
+  /* 间距调整 */
+  .mobile-spacing {
+    padding: 1rem;
+  }
+
+  .mobile-spacing-sm {
+    padding: 0.5rem;
+  }
+
+  /* 网格布局优化 */
+  .mobile-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .mobile-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* 按钮优化 */
+  .mobile-button {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    border-radius: 8px;
+    min-height: 44px;
+  }
+
+  /* 输入框优化 */
+  .mobile-input {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    min-height: 44px;
+  }
+
+  /* 导航链接优化 */
+  .mobile-nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    min-height: 44px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-nav-link:hover {
+    background-color: rgba(99, 102, 241, 0.1);
+  }
+
+  .mobile-nav-link.active {
+    background-color: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+  }
+
+  /* 滚动优化 */
+  .mobile-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* 防止缩放 */
+  .mobile-no-zoom {
+    touch-action: manipulation;
+  }
+
+  /* 安全区域颜色 */
+  .safe-area-bg {
+    background-color: white;
+  }
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+  .bottom-nav {
+    background: rgba(17, 24, 39, 0.95);
+    border-top-color: #374151;
+  }
+
+  .safe-area-bg {
+    background-color: #111827;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .bottom-nav {
+    border-top-width: 2px;
+    border-top-color: #000;
+  }
+
+  .mobile-nav-link {
+    border: 1px solid transparent;
+  }
+
+  .mobile-nav-link:focus {
+    border-color: #000;
+    outline: 2px solid #000;
+  }
+}
+
+/* 减少动画模式 */
+@media (prefers-reduced-motion: reduce) {
+  .mobile-nav-link {
+    transition: none;
+  }
+
+  .mobile-card {
+    transition: none;
+  }
+}
