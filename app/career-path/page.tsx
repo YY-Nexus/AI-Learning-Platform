@@ -120,6 +120,39 @@ export default function CareerPathPage() {
     },
   ]
 
+  const careerPaths = [
+    {
+      id: 1,
+      title: "AI应用工程师",
+      description: "专注于将AI模型集成到实际应用中，开发智能解决方案",
+      level: "入门到中级",
+      duration: "6-12个月",
+      salary: "15-25万/年",
+      skills: ["Python", "API集成", "前端开发", "Prompt工程"],
+      image: "/placeholder.svg?height=200&width=300&text=AI应用工程师",
+    },
+    {
+      id: 2,
+      title: "Prompt工程师",
+      description: "专业设计和优化提示词，提高AI模型输出质量和效率",
+      level: "中级",
+      duration: "3-6个月",
+      salary: "18-30万/年",
+      skills: ["提示词设计", "上下文工程", "自然语言处理", "领域知识"],
+      image: "/placeholder.svg?height=200&width=300&text=Prompt工程师",
+    },
+    {
+      id: 3,
+      title: "AI解决方案架构师",
+      description: "设计企业级AI解决方案架构，整合多种AI技术满足业务需求",
+      level: "高级",
+      duration: "12-24个月",
+      salary: "30-50万/年",
+      skills: ["系统设计", "AI模型选型", "项目管理", "业务分析"],
+      image: "/placeholder.svg?height=200&width=300&text=AI架构师",
+    },
+  ]
+
   const selectedLevelData = careerLevels.find((level) => level.id === selectedLevel)
 
   return (

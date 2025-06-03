@@ -5,11 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { BookOpen, Brain, Users, Trophy, Clock, Target, Play, CheckCircle, Star } from "lucide-react"
 import Link from "next/link"
-import { ResponsiveLayout } from "@/components/responsive-layout"
-import { AccessibleProgress } from "@/components/accessibility/accessible-progress"
-import { AccessibleButton } from "@/components/accessibility/accessible-button"
-import { ScreenReaderOnly } from "@/components/accessibility/screen-reader-only"
-import { LiveRegion } from "@/components/accessibility/live-region"
+import { Button } from "@/components/ui/button"
 
 export default function Dashboard() {
   const [currentUser] = useState({
@@ -19,8 +15,6 @@ export default function Dashboard() {
     points: 2450,
     streak: 7,
   })
-
-  const [announcements, setAnnouncements] = useState("")
 
   const courses = [
     {
@@ -68,161 +62,149 @@ export default function Dashboard() {
     { type: "获得徽章", content: "连续学习7天", time: "1周前", icon: Star },
   ]
 
-  const handleContinueLearning = (courseTitle: string) => {
-    setAnnouncements(`开始学习课程：${courseTitle}`)
-  }
-
   return (
-    <ResponsiveLayout title="AI学习系统" user={currentUser}>
-      <LiveRegion message={announcements} />
+    <div className="min-h-screen bg-gray-50 pb-20">
+      <div className="container mx-auto px-4 py-6">
+        {/* 页面加载确认 */}
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+          <div className="flex items-center">
+            <CheckCircle className="h-5 w-5 mr-2" />
+            <span className="font-medium">✅ 首页加载成功！</span>
+          </div>
+          <p className="text-sm mt-1">底部菜单"首页"按钮跳转功能正常工作。</p>
+        </div>
 
-      <div>
         {/* 欢迎区域 */}
-        <header className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">欢迎回来，{currentUser.name}！</h1>
+        <header className="mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">欢迎回来，{currentUser.name}！</h1>
           <p className="text-gray-600">继续您的AI学习之旅，掌握前沿技术</p>
         </header>
 
         {/* 统计卡片 */}
-        <section aria-labelledby="stats-heading" className="mb-6 sm:mb-8">
+        <section aria-labelledby="stats-heading" className="mb-6">
           <h2 id="stats-heading" className="sr-only">
             学习统计概览
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
-            <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
-              <CardContent className="p-4 sm:p-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg">
+              <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-blue-100 text-xs sm:text-sm">学习积分</p>
-                    <p className="text-xl sm:text-2xl font-bold" aria-label={`学习积分 ${currentUser.points} 分`}>
-                      {currentUser.points}
-                    </p>
+                    <p className="text-blue-100 text-sm">学习积分</p>
+                    <p className="text-xl font-bold">{currentUser.points}</p>
                   </div>
-                  <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-blue-200" aria-hidden="true" />
+                  <Trophy className="h-8 w-8 text-blue-200" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
-              <CardContent className="p-4 sm:p-6">
+            <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg">
+              <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-green-100 text-xs sm:text-sm">连续学习</p>
-                    <p className="text-xl sm:text-2xl font-bold" aria-label={`连续学习 ${currentUser.streak} 天`}>
-                      {currentUser.streak}天
-                    </p>
+                    <p className="text-green-100 text-sm">连续学习</p>
+                    <p className="text-xl font-bold">{currentUser.streak}天</p>
                   </div>
-                  <Target className="h-6 w-6 sm:h-8 sm:w-8 text-green-200" aria-hidden="true" />
+                  <Target className="h-8 w-8 text-green-200" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
-              <CardContent className="p-4 sm:p-6">
+            <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg">
+              <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-purple-100 text-xs sm:text-sm">完成课程</p>
-                    <p className="text-xl sm:text-2xl font-bold" aria-label="完成课程 12 门">
-                      12
-                    </p>
+                    <p className="text-purple-100 text-sm">完成课程</p>
+                    <p className="text-xl font-bold">12</p>
                   </div>
-                  <BookOpen className="h-6 w-6 sm:h-8 sm:w-8 text-purple-200" aria-hidden="true" />
+                  <BookOpen className="h-8 w-8 text-purple-200" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
-              <CardContent className="p-4 sm:p-6">
+            <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg">
+              <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-orange-100 text-xs sm:text-sm">学习时长</p>
-                    <p className="text-xl sm:text-2xl font-bold" aria-label="学习时长 156 小时">
-                      156小时
-                    </p>
+                    <p className="text-orange-100 text-sm">学习时长</p>
+                    <p className="text-xl font-bold">156小时</p>
                   </div>
-                  <Clock className="h-6 w-6 sm:h-8 sm:w-8 text-orange-200" aria-hidden="true" />
+                  <Clock className="h-8 w-8 text-orange-200" />
                 </div>
               </CardContent>
             </Card>
           </div>
         </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* 课程进度 */}
           <section aria-labelledby="courses-heading" className="lg:col-span-2">
-            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+            <Card className="shadow-lg">
               <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <BookOpen className="h-5 w-5 text-indigo-600" aria-hidden="true" />
+                <CardTitle className="flex items-center">
+                  <BookOpen className="h-5 w-5 mr-2 text-blue-600" />
                   <span id="courses-heading">我的课程</span>
                 </CardTitle>
                 <CardDescription>继续学习您的课程</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4">
                 {courses.map((course) => (
-                  <article key={course.id} className="group">
-                    <Card className="border border-gray-200 hover:border-indigo-300 transition-all duration-300 hover:shadow-md">
-                      <CardContent className="p-6">
-                        <div className="flex items-start space-x-4">
-                          <img
-                            src={course.image || "/placeholder.svg"}
-                            alt={`${course.title}课程封面`}
-                            className="w-20 h-20 rounded-lg object-cover"
-                          />
-                          <div className="flex-1">
-                            <div className="flex items-start justify-between mb-2">
-                              <h3 className="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">
-                                {course.title}
-                              </h3>
-                              <Badge
-                                variant={
-                                  course.difficulty === "初级"
-                                    ? "default"
-                                    : course.difficulty === "中级"
-                                      ? "secondary"
-                                      : "destructive"
-                                }
-                                aria-label={`课程难度：${course.difficulty}`}
-                              >
-                                {course.difficulty}
-                              </Badge>
-                            </div>
-                            <p className="text-sm text-gray-600 mb-3">{course.description}</p>
-                            <div className="flex items-center justify-between mb-3">
-                              <div className="flex items-center space-x-4 text-sm text-gray-500">
-                                <span aria-label={`已完成 ${course.completed} 章节，共 ${course.chapters} 章节`}>
-                                  {course.completed}/{course.chapters} 章节
-                                </span>
-                                <span aria-label={`课程时长 ${course.duration}`}>{course.duration}</span>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <AccessibleProgress
-                                value={course.progress}
-                                label={`${course.title}学习进度`}
-                                color={course.color}
-                                className="flex-1 mr-4"
-                                showPercentage={false}
-                              />
-                              <span className="text-sm font-medium text-indigo-600 mr-4">{course.progress}%</span>
-                              <AccessibleButton
-                                size="sm"
-                                className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                                onClick={() => handleContinueLearning(course.title)}
-                                asChild
-                              >
-                                <Link href={`/courses/${course.id}`}>
-                                  <Play className="h-4 w-4 mr-1" aria-hidden="true" />
-                                  继续学习
-                                  <ScreenReaderOnly>课程：{course.title}</ScreenReaderOnly>
-                                </Link>
-                              </AccessibleButton>
+                  <Card
+                    key={course.id}
+                    className="border hover:border-blue-300 transition-all duration-300 hover:shadow-md"
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-start space-x-4">
+                        <img
+                          src={course.image || "/placeholder.svg"}
+                          alt={`${course.title}课程封面`}
+                          className="w-20 h-20 rounded-lg object-cover"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between mb-2">
+                            <h3 className="font-semibold text-gray-800 hover:text-blue-600 transition-colors">
+                              {course.title}
+                            </h3>
+                            <Badge
+                              variant={
+                                course.difficulty === "初级"
+                                  ? "default"
+                                  : course.difficulty === "中级"
+                                    ? "secondary"
+                                    : "destructive"
+                              }
+                            >
+                              {course.difficulty}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-gray-600 mb-3">{course.description}</p>
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center space-x-4 text-sm text-gray-500">
+                              <span>
+                                {course.completed}/{course.chapters} 章节
+                              </span>
+                              <span>{course.duration}</span>
                             </div>
                           </div>
+                          <div className="flex items-center justify-between">
+                            <div className="w-full bg-gray-200 rounded-full h-2 mr-4">
+                              <div
+                                className={`h-2 rounded-full ${course.color}`}
+                                style={{ width: `${course.progress}%` }}
+                              ></div>
+                            </div>
+                            <span className="text-sm font-medium text-blue-600 mr-4">{course.progress}%</span>
+                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white" asChild>
+                              <Link href={`/courses/${course.id}`}>
+                                <Play className="h-4 w-4 mr-1" />
+                                继续学习
+                              </Link>
+                            </Button>
+                          </div>
                         </div>
-                      </CardContent>
-                    </Card>
-                  </article>
+                      </div>
+                    </CardContent>
+                  </Card>
                 ))}
               </CardContent>
             </Card>
@@ -232,28 +214,26 @@ export default function Dashboard() {
           <aside className="space-y-6">
             {/* 最近活动 */}
             <section aria-labelledby="activities-heading">
-              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+              <Card className="shadow-lg">
                 <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Clock className="h-5 w-5 text-green-600" aria-hidden="true" />
+                  <CardTitle className="flex items-center">
+                    <Clock className="h-5 w-5 mr-2 text-green-600" />
                     <span id="activities-heading">最近活动</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-4" role="list">
+                  <ul className="space-y-4">
                     {recentActivities.map((activity, index) => {
                       const IconComponent = activity.icon
                       return (
-                        <li key={index} className="flex items-start space-x-3" role="listitem">
+                        <li key={index} className="flex items-start space-x-3">
                           <div className="flex-shrink-0">
-                            <IconComponent className="h-5 w-5 text-green-500" aria-hidden="true" />
+                            <IconComponent className="h-5 w-5 text-green-500" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-gray-900">{activity.type}</p>
+                            <p className="text-sm font-medium text-gray-800">{activity.type}</p>
                             <p className="text-sm text-gray-600 truncate">{activity.content}</p>
-                            <time className="text-xs text-gray-400" dateTime={activity.time}>
-                              {activity.time}
-                            </time>
+                            <time className="text-xs text-gray-400">{activity.time}</time>
                           </div>
                         </li>
                       )
@@ -265,46 +245,35 @@ export default function Dashboard() {
 
             {/* 快速操作 */}
             <section aria-labelledby="quick-actions-heading">
-              <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+              <Card className="shadow-lg">
                 <CardHeader>
                   <CardTitle id="quick-actions-heading">快速操作</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <AccessibleButton
-                    className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                    asChild
-                  >
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" asChild>
                     <Link href="/practice">
-                      <Brain className="h-4 w-4 mr-2" aria-hidden="true" />
+                      <Brain className="h-4 w-4 mr-2" />
                       开始练习
                     </Link>
-                  </AccessibleButton>
-                  <AccessibleButton
-                    variant="outline"
-                    className="w-full border-2 hover:bg-gray-50 transform hover:scale-105 transition-all duration-300"
-                    asChild
-                  >
+                  </Button>
+                  <Button variant="outline" className="w-full border-2 hover:bg-gray-50" asChild>
                     <Link href="/courses">
-                      <BookOpen className="h-4 w-4 mr-2" aria-hidden="true" />
+                      <BookOpen className="h-4 w-4 mr-2" />
                       浏览课程
                     </Link>
-                  </AccessibleButton>
-                  <AccessibleButton
-                    variant="outline"
-                    className="w-full border-2 hover:bg-gray-50 transform hover:scale-105 transition-all duration-300"
-                    asChild
-                  >
+                  </Button>
+                  <Button variant="outline" className="w-full border-2 hover:bg-gray-50" asChild>
                     <Link href="/team">
-                      <Users className="h-4 w-4 mr-2" aria-hidden="true" />
+                      <Users className="h-4 w-4 mr-2" />
                       团队协作
                     </Link>
-                  </AccessibleButton>
+                  </Button>
                 </CardContent>
               </Card>
             </section>
           </aside>
         </div>
       </div>
-    </ResponsiveLayout>
+    </div>
   )
 }

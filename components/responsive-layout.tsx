@@ -23,7 +23,7 @@ export function ResponsiveLayout({ children, title, user }: ResponsiveLayoutProp
 
       {/* 导航栏 */}
       <nav
-        className="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40"
+        className="bg-white/95 backdrop-blur-md border-b-2 border-gray-200 sticky top-0 z-40 shadow-sm"
         role="navigation"
         aria-label="主导航"
       >
@@ -32,37 +32,67 @@ export function ResponsiveLayout({ children, title, user }: ResponsiveLayoutProp
             <div className="flex items-center space-x-4">
               <MobileNav user={user} />
               <div className="flex items-center space-x-2">
-                <Brain className="h-6 w-6 text-indigo-600" aria-hidden="true" />
+                <Brain className="h-6 w-6 text-indigo-700" aria-hidden="true" />
                 <h1 className="text-lg font-semibold text-gray-900 truncate max-w-[150px] sm:max-w-none">{title}</h1>
               </div>
             </div>
             <div className="hidden md:flex items-center space-x-4" role="menubar">
-              <Button variant="ghost" size="sm" asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-700 hover:text-gray-900 hover:bg-gray-100 font-medium"
+                asChild
+              >
                 <Link href="/" role="menuitem">
                   首页
                 </Link>
               </Button>
-              <Button variant="ghost" size="sm" asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-700 hover:text-gray-900 hover:bg-gray-100 font-medium"
+                asChild
+              >
                 <Link href="/courses" role="menuitem">
                   课程中心
                 </Link>
               </Button>
-              <Button variant="ghost" size="sm" asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-700 hover:text-gray-900 hover:bg-gray-100 font-medium"
+                asChild
+              >
                 <Link href="/exam" role="menuitem">
                   练习测试
                 </Link>
               </Button>
-              <Button variant="ghost" size="sm" asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-700 hover:text-gray-900 hover:bg-gray-100 font-medium"
+                asChild
+              >
                 <Link href="/progress" role="menuitem">
                   学习进度
                 </Link>
               </Button>
-              <Button variant="ghost" size="sm" asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-700 hover:text-gray-900 hover:bg-gray-100 font-medium"
+                asChild
+              >
                 <Link href="/team" role="menuitem">
                   团队管理
                 </Link>
               </Button>
-              <Button variant="ghost" size="sm" asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-700 hover:text-gray-900 hover:bg-gray-100 font-medium"
+                asChild
+              >
                 <Link href="/profile" role="menuitem">
                   我的资料
                 </Link>
