@@ -23,7 +23,6 @@ import {
   Target,
 } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
 
 export default function CareerPathPage() {
   const [selectedLevel, setSelectedLevel] = useState("junior")
@@ -117,39 +116,6 @@ export default function CareerPathPage() {
       ],
       salary: "100-200万+/年",
       nextSteps: ["引领行业技术发展", "建立技术影响力", "培养下一代技术领导者", "推动组织技术变革"],
-    },
-  ]
-
-  const careerPaths = [
-    {
-      id: 1,
-      title: "AI应用工程师",
-      description: "专注于将AI模型集成到实际应用中，开发智能解决方案",
-      level: "入门到中级",
-      duration: "6-12个月",
-      salary: "15-25万/年",
-      skills: ["Python", "API集成", "前端开发", "Prompt工程"],
-      image: "/placeholder.svg?height=200&width=300&text=AI应用工程师",
-    },
-    {
-      id: 2,
-      title: "Prompt工程师",
-      description: "专业设计和优化提示词，提高AI模型输出质量和效率",
-      level: "中级",
-      duration: "3-6个月",
-      salary: "18-30万/年",
-      skills: ["提示词设计", "上下文工程", "自然语言处理", "领域知识"],
-      image: "/placeholder.svg?height=200&width=300&text=Prompt工程师",
-    },
-    {
-      id: 3,
-      title: "AI解决方案架构师",
-      description: "设计企业级AI解决方案架构，整合多种AI技术满足业务需求",
-      level: "高级",
-      duration: "12-24个月",
-      salary: "30-50万/年",
-      skills: ["系统设计", "AI模型选型", "项目管理", "业务分析"],
-      image: "/placeholder.svg?height=200&width=300&text=AI架构师",
     },
   ]
 
@@ -301,13 +267,7 @@ export default function CareerPathPage() {
                           <span className="text-sm">{skill.name}</span>
                           <span className="text-sm text-gray-600">{skill.level}%</span>
                         </div>
-                        <Progress
-                          value={skill.level}
-                          className="h-2"
-                          style={{
-                            "--progress-color": `linear-gradient(to right, ${["blue", "green", "purple", "orange"][index % 4]}, transparent)`,
-                          }}
-                        />
+                        <Progress value={skill.level} className="h-2" />
                       </div>
                     ))}
                   </div>
@@ -323,15 +283,6 @@ export default function CareerPathPage() {
                       </li>
                     ))}
                   </ul>
-                </div>
-                <div className="relative w-full h-64 rounded-md overflow-hidden shadow-md">
-                  <Image
-                    src="/career-path.png"
-                    alt="职业发展路线图"
-                    layout="fill"
-                    objectFit="cover"
-                    className="transition-transform duration-500 hover:scale-110"
-                  />
                 </div>
               </CardContent>
             </Card>
