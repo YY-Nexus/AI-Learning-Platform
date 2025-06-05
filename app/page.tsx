@@ -65,15 +65,6 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <div className="container mx-auto px-4 py-6">
-        {/* 页面加载确认 */}
-        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-          <div className="flex items-center">
-            <CheckCircle className="h-5 w-5 mr-2" />
-            <span className="font-medium">✅ 首页加载成功！</span>
-          </div>
-          <p className="text-sm mt-1">底部菜单"首页"按钮跳转功能正常工作。</p>
-        </div>
-
         {/* 欢迎区域 */}
         <header className="mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">欢迎回来，{currentUser.name}！</h1>

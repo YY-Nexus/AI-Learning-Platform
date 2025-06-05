@@ -1,172 +1,142 @@
-/* 移动端优化样式 - 避免黑色和深色 */
+/* 移动端优化样式 - 强制显示底部导航 */
 @media (max-width: 768px) {
   /* 确保页面内容不被底部导航遮挡 */
   body {
-    padding-bottom: 5rem;
-  }
-
-  /* 主内容区域底部间距 */
-  main {
     padding-bottom: 5rem !important;
   }
 
-  /* 底部导航固定样式 */
-  .bottom-nav-fixed {
+  /* 主内容区域底部间距 */
+  main,
+  .main-content {
+    padding-bottom: 5rem !important;
+  }
+
+  /* 底部导航样式 - 强制显示 */
+  .bottom-nav,
+  nav[data-bottom-nav],
+  [data-bottom-nav="true"] {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     position: fixed !important;
     bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
     z-index: 9999 !important;
     background-color: white !important;
-    border-top: 2px solid #d1d5db !important;
+    border-top: 1px solid #e5e7eb !important;
     box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+    height: 4rem !important;
+    width: 100% !important;
+  }
+
+  /* 确保底部导航内容正确显示 */
+  .bottom-nav > div,
+  nav[data-bottom-nav] > div {
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    height: 100% !important;
+    width: 100% !important;
+    padding: 0 0.5rem !important;
+  }
+
+  /* 导航链接样式 */
+  .bottom-nav a,
+  nav[data-bottom-nav] a {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 1 !important;
+    height: 100% !important;
+    padding: 0.5rem 0.25rem !important;
+    border-radius: 0.5rem !important;
+    transition: all 0.2s ease !important;
+    text-decoration: none !important;
+    color: #6b7280 !important;
+    min-height: 44px !important;
+  }
+
+  /* 活跃状态 */
+  .bottom-nav a[aria-current="page"],
+  nav[data-bottom-nav] a[aria-current="page"] {
+    color: #2563eb !important;
+    background-color: #dbeafe !important;
+  }
+
+  /* 悬停状态 */
+  .bottom-nav a:hover,
+  nav[data-bottom-nav] a:hover {
+    color: #3b82f6 !important;
+    background-color: #f3f4f6 !important;
+  }
+
+  /* 图标样式 */
+  .bottom-nav svg,
+  nav[data-bottom-nav] svg {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  /* 文字样式 */
+  .bottom-nav span,
+  nav[data-bottom-nav] span {
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    line-height: 1rem !important;
   }
 
   /* 触摸优化 */
   .touch-target {
-    min-height: 44px;
-    min-width: 44px;
+    min-height: 44px !important;
+    min-width: 44px !important;
   }
 
-  /* 按钮优化 - 使用蓝色系 */
-  .mobile-button {
-    background-color: #3b82f6;
-    color: white;
-    padding: 0.75rem 1rem;
-    font-size: 0.875rem;
-    border-radius: 8px;
-    min-height: 44px;
-    border: none;
+  /* 安全区域适配 */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
   }
 
-  .mobile-button:hover {
-    background-color: #2563eb;
+  /* 强制显示 - 覆盖任何隐藏样式 */
+  .md\:hidden {
+    display: flex !important;
   }
 
-  /* 导航链接优化 - 避免深色 */
-  .mobile-nav-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-    min-height: 44px;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    color: #6b7280; /* 中等灰色 */
-  }
-
-  .mobile-nav-link:hover {
-    background-color: #f3f4f6;
-    color: #3b82f6;
-  }
-
-  .mobile-nav-link.active {
-    background-color: #dbeafe;
-    color: #2563eb;
-  }
-
-  /* 文字颜色优化 */
-  .text-primary {
-    color: #3b82f6 !important;
-  }
-
-  .text-secondary {
-    color: #6b7280 !important;
-  }
-
-  .text-muted {
-    color: #9ca3af !important;
-  }
-
-  /* 边框颜色优化 */
-  .border-primary {
-    border-color: #3b82f6 !important;
-  }
-
-  .border-secondary {
-    border-color: #d1d5db !important;
-  }
-
-  /* 背景颜色优化 */
-  .bg-primary {
-    background-color: #3b82f6 !important;
-  }
-
-  .bg-secondary {
-    background-color: #f9fafb !important;
-  }
-
-  .bg-accent {
-    background-color: #dbeafe !important;
-  }
-
-  /* 卡片样式优化 */
-  .mobile-card {
-    background-color: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1rem;
-  }
-
-  /* 输入框优化 */
-  .mobile-input {
-    padding: 0.75rem;
-    font-size: 1rem;
-    border: 2px solid #d1d5db;
-    border-radius: 8px;
-    min-height: 44px;
-    color: #374151;
-  }
-
-  .mobile-input:focus {
-    border-color: #3b82f6;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  }
-
-  /* 确保底部导航永远可见 */
-  .pb-20 {
-    padding-bottom: 5rem !important;
-  }
-
-  /* 强制显示底部导航 */
-  [data-bottom-nav] {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+  /* 确保在桌面端隐藏 */
+  @media (min-width: 769px) {
+    .bottom-nav,
+    nav[data-bottom-nav] {
+      display: none !important;
+    }
   }
 }
 
-/* 浅色主题优化 */
-@media (prefers-color-scheme: light) {
+/* 全局样式 - 确保底部导航始终可见 */
+.bottom-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
   .bottom-nav {
-    background: white;
-    border-top-color: #d1d5db;
+    display: flex !important;
   }
 }
 
-/* 高对比度模式 - 使用蓝色而非黑色 */
+/* 高对比度模式 */
 @media (prefers-contrast: high) {
-  .bottom-nav {
-    border-top-width: 3px;
-    border-top-color: #1d4ed8;
-  }
-
-  .mobile-nav-link:focus {
-    border: 2px solid #1d4ed8;
-    outline: 2px solid #1d4ed8;
+  .bottom-nav,
+  nav[data-bottom-nav] {
+    border-top-width: 2px !important;
+    border-top-color: #1d4ed8 !important;
   }
 }
 
 /* 减少动画模式 */
 @media (prefers-reduced-motion: reduce) {
-  .mobile-nav-link {
-    transition: none;
-  }
-
-  .mobile-card {
-    transition: none;
+  .bottom-nav a,
+  nav[data-bottom-nav] a {
+    transition: none !important;
   }
 }
