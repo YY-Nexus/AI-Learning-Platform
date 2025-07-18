@@ -57,3 +57,6 @@ export function BrandHeader({ showSubtitle = true, size = "md", className = "" }
     </div>
   )
 }
+
+// 添加默认导出
+export default BrandHeader

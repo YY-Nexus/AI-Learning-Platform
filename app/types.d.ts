@@ -1,42 +1,46 @@
-import type React from "react"
 // 用户相关类型
 export interface User {
   id: string
   name: string
   email: string
   avatar?: string
-  role: "student" | "teacher" | "admin"
-  createdAt: string
-  updatedAt: string
+  role: "student" | "instructor" | "admin"
+  createdAt: Date
+  updatedAt: Date
   profile: UserProfile
-  preferences: UserPreferences
 }
 
 export interface UserProfile {
   bio?: string
   location?: string
   website?: string
-  github?: string
-  linkedin?: string
-  skills: string[]
-  interests: string[]
-  experience: "beginner" | "intermediate" | "advanced"
-  goals: string[]
+  socialLinks?: {
+    github?: string
+    linkedin?: string
+    twitter?: string
+  }
+  preferences: UserPreferences
+  statistics: UserStatistics
 }
 
 export interface UserPreferences {
-  theme: "light" | "dark" | "system"
   language: "zh-CN" | "en-US"
+  theme: "light" | "dark" | "system"
   notifications: {
     email: boolean
     push: boolean
-    sms: boolean
+    courseUpdates: boolean
+    examReminders: boolean
   }
-  privacy: {
-    profileVisible: boolean
-    progressVisible: boolean
-    achievementsVisible: boolean
-  }
+}
+
+export interface UserStatistics {
+  totalCoursesCompleted: number
+  totalExamsPassed: number
+  totalStudyHours: number
+  currentStreak: number
+  longestStreak: number
+  achievements: Achievement[]
 }
 
 // 课程相关类型
@@ -44,49 +48,48 @@ export interface Course {
   id: string
   title: string
   description: string
-  image: string
   instructor: string
-  duration: number
+  duration: number // 分钟
   difficulty: "beginner" | "intermediate" | "advanced"
   category: string
   tags: string[]
+  thumbnail: string
   rating: number
   reviewCount: number
-  enrolledCount: number
+  enrollmentCount: number
   price: number
-  originalPrice?: number
-  isPopular: boolean
-  isFeatured: boolean
-  createdAt: string
-  updatedAt: string
+  currency: string
+  isPublished: boolean
+  createdAt: Date
+  updatedAt: Date
   modules: CourseModule[]
   prerequisites: string[]
-  learningOutcomes: string[]
-  certificate: boolean
+  learningObjectives: string[]
 }
 
 export interface CourseModule {
   id: string
   title: string
   description: string
+  order: number
   duration: number
   lessons: Lesson[]
-  quiz?: any // Declare Quiz type here if needed
-  assignment?: any // Declare Assignment type here if needed
+  quiz?: any // Declare Quiz type here or import it
 }
 
 export interface Lesson {
   id: string
   title: string
   description: string
-  type: "video" | "text" | "interactive" | "quiz"
   content: string
+  type: "video" | "text" | "interactive" | "assignment"
   duration: number
-  resources: Resource[]
-  completed: boolean
+  order: number
+  resources: LessonResource[]
+  isCompleted?: boolean
 }
 
-export interface Resource {
+export interface LessonResource {
   id: string
   title: string
   type: "pdf" | "link" | "code" | "image"
@@ -101,74 +104,47 @@ export interface Exam {
   description: string
   type: "practice" | "certification" | "assessment"
   difficulty: "beginner" | "intermediate" | "advanced"
-  duration: number
+  duration: number // 分钟
   totalQuestions: number
   passingScore: number
-  attempts: number
   maxAttempts: number
-  questions: Question[]
-  createdAt: string
-  updatedAt: string
+  isPublished: boolean
+  createdAt: Date
+  updatedAt: Date
+  questions: ExamQuestion[]
+  prerequisites: string[]
 }
 
-export interface Question {
+export interface ExamQuestion {
   id: string
-  type: "multiple-choice" | "true-false" | "fill-blank" | "essay"
   question: string
+  type: "multiple-choice" | "true-false" | "short-answer" | "essay"
   options?: string[]
   correctAnswer: string | string[]
-  explanation: string
-  difficulty: "easy" | "medium" | "hard"
+  explanation?: string
   points: number
-  category: string
+  difficulty: "easy" | "medium" | "hard"
   tags: string[]
 }
 
-export interface ExamResult {
+export interface ExamAttempt {
   id: string
   examId: string
   userId: string
-  score: number
-  totalScore: number
-  percentage: number
-  passed: boolean
+  startedAt: Date
+  completedAt?: Date
+  score?: number
+  passed?: boolean
+  answers: ExamAnswer[]
   timeSpent: number
-  answers: Answer[]
-  startedAt: string
-  completedAt: string
+  status: "in-progress" | "completed" | "abandoned"
 }
 
-export interface Answer {
+export interface ExamAnswer {
   questionId: string
   answer: string | string[]
   isCorrect: boolean
   timeSpent: number
-}
-
-// 学习进度相关类型
-export interface Progress {
-  userId: string
-  courseId: string
-  moduleId?: string
-  lessonId?: string
-  completionPercentage: number
-  timeSpent: number
-  lastAccessedAt: string
-  status: "not-started" | "in-progress" | "completed"
-  notes: string[]
-  bookmarks: string[]
-}
-
-export interface Achievement {
-  id: string
-  title: string
-  description: string
-  icon: string
-  type: "course" | "exam" | "streak" | "milestone"
-  criteria: string
-  points: number
-  rarity: "common" | "rare" | "epic" | "legendary"
-  unlockedAt?: string
 }
 
 // 团队相关类型
@@ -176,31 +152,32 @@ export interface Team {
   id: string
   name: string
   description: string
-  image: string
   type: "study-group" | "project-team" | "community"
-  memberCount: number
-  maxMembers: number
   isPublic: boolean
-  tags: string[]
-  createdAt: string
+  memberCount: number
+  maxMembers?: number
+  createdAt: Date
+  updatedAt: Date
+  creator: User
   members: TeamMember[]
   activities: TeamActivity[]
 }
 
 export interface TeamMember {
   userId: string
+  user: User
   role: "owner" | "admin" | "member"
-  joinedAt: string
+  joinedAt: Date
   contributions: number
-  status: "active" | "inactive"
 }
 
 export interface TeamActivity {
   id: string
-  type: "join" | "leave" | "complete-course" | "pass-exam" | "discussion"
-  userId: string
+  type: "member-joined" | "course-completed" | "exam-passed" | "discussion-created"
   description: string
-  createdAt: string
+  userId: string
+  user: User
+  createdAt: Date
   metadata?: Record<string, any>
 }
 
@@ -209,25 +186,69 @@ export interface LearningPath {
   id: string
   title: string
   description: string
-  image: string
   difficulty: "beginner" | "intermediate" | "advanced"
-  estimatedDuration: number
-  courses: string[]
+  estimatedDuration: number // 小时
+  category: string
+  tags: string[]
+  thumbnail: string
+  isPublished: boolean
+  createdAt: Date
+  updatedAt: Date
+  courses: LearningPathCourse[]
   prerequisites: string[]
   outcomes: string[]
-  popularity: number
-  rating: number
-  createdAt: string
-  updatedAt: string
+}
+
+export interface LearningPathCourse {
+  courseId: string
+  course: Course
+  order: number
+  isRequired: boolean
+  estimatedDuration: number
+}
+
+export interface UserLearningPath {
+  id: string
+  userId: string
+  learningPathId: string
+  learningPath: LearningPath
+  startedAt: Date
+  completedAt?: Date
+  progress: number // 0-100
+  currentCourseId?: string
+  status: "not-started" | "in-progress" | "completed" | "paused"
+}
+
+// 成就相关类型
+export interface Achievement {
+  id: string
+  title: string
+  description: string
+  icon: string
+  type: "course" | "exam" | "streak" | "social" | "special"
+  rarity: "common" | "rare" | "epic" | "legendary"
+  points: number
+  requirements: AchievementRequirement[]
+  unlockedAt?: Date
+}
+
+export interface AchievementRequirement {
+  type: "course-completion" | "exam-score" | "study-streak" | "social-interaction"
+  target: number
+  current?: number
 }
 
 // API 响应类型
 export interface ApiResponse<T> {
   success: boolean
   data?: T
-  message?: string
   error?: string
-  pagination?: {
+  message?: string
+}
+
+export interface PaginatedResponse<T> {
+  data: T[]
+  pagination: {
     page: number
     limit: number
     total: number
@@ -239,7 +260,7 @@ export interface ApiResponse<T> {
 export interface LoginForm {
   email: string
   password: string
-  remember?: boolean
+  rememberMe?: boolean
 }
 
 export interface RegisterForm {
@@ -250,237 +271,207 @@ export interface RegisterForm {
   agreeToTerms: boolean
 }
 
-export interface ProfileForm {
+export interface ProfileUpdateForm {
   name: string
   bio?: string
   location?: string
   website?: string
-  skills: string[]
-  interests: string[]
-  experience: "beginner" | "intermediate" | "advanced"
+  socialLinks?: {
+    github?: string
+    linkedin?: string
+    twitter?: string
+  }
 }
 
-// 统计数据类型
-export interface Statistics {
-  totalUsers: number
+// 统计相关类型
+export interface DashboardStats {
   totalCourses: number
-  totalExams: number
-  totalTeams: number
-  activeUsers: number
   completedCourses: number
+  totalExams: number
   passedExams: number
-  averageRating: number
+  studyHours: number
+  currentStreak: number
+  achievements: number
+  rank: number
 }
 
-export interface UserStatistics {
-  coursesCompleted: number
-  examsPasssed: number
-  totalStudyTime: number
-  currentStreak: number
-  longestStreak: number
-  achievementsUnlocked: number
-  teamParticipations: number
-  averageScore: number
+export interface CourseProgress {
+  courseId: string
+  progress: number // 0-100
+  completedLessons: number
+  totalLessons: number
+  timeSpent: number
+  lastAccessedAt: Date
 }
 
 // 设置相关类型
 export interface AppSettings {
-  theme: "light" | "dark" | "system"
-  language: "zh-CN" | "en-US"
-  timezone: string
-  dateFormat: string
-  currency: string
-  notifications: NotificationSettings
-  privacy: PrivacySettings
-  accessibility: AccessibilitySettings
-}
-
-export interface NotificationSettings {
-  email: {
+  appearance: {
+    theme: "light" | "dark" | "system"
+    language: "zh-CN" | "en-US"
+    fontSize: "small" | "medium" | "large"
+  }
+  notifications: {
+    email: boolean
+    push: boolean
     courseUpdates: boolean
     examReminders: boolean
     teamActivities: boolean
-    achievements: boolean
-    newsletter: boolean
   }
-  push: {
-    studyReminders: boolean
-    deadlines: boolean
-    teamMessages: boolean
-    systemUpdates: boolean
+  privacy: {
+    profileVisibility: "public" | "friends" | "private"
+    showProgress: boolean
+    showAchievements: boolean
   }
-  sms: {
-    importantUpdates: boolean
-    securityAlerts: boolean
+  study: {
+    dailyGoal: number // 分钟
+    reminderTime?: string
+    autoplay: boolean
+    playbackSpeed: number
   }
 }
 
-export interface PrivacySettings {
-  profileVisibility: "public" | "friends" | "private"
-  progressVisibility: "public" | "friends" | "private"
-  achievementsVisibility: "public" | "friends" | "private"
-  allowDataCollection: boolean
-  allowMarketing: boolean
-  allowThirdPartySharing: boolean
-}
-
-export interface AccessibilitySettings {
-  fontSize: "small" | "medium" | "large" | "extra-large"
-  contrast: "normal" | "high"
-  animations: boolean
-  screenReader: boolean
-  keyboardNavigation: boolean
-  colorBlindSupport: boolean
-}
-
-// 搜索和过滤类型
+// 搜索相关类型
 export interface SearchFilters {
   query?: string
   category?: string
   difficulty?: string[]
   duration?: {
-    min: number
-    max: number
+    min?: number
+    max?: number
   }
   rating?: number
   price?: {
-    min: number
-    max: number
+    min?: number
+    max?: number
   }
   tags?: string[]
-  instructor?: string
-  sortBy?: "popularity" | "rating" | "newest" | "price-low" | "price-high"
 }
 
-// 错误类型
-export interface AppError {
-  code: string
-  message: string
-  details?: string
-  timestamp: string
-  userId?: string
-  context?: Record<string, any>
-}
-
-// 事件类型
-export interface AppEvent {
-  type: string
-  payload: Record<string, any>
-  timestamp: string
-  userId?: string
-  sessionId?: string
-}
-
-// 全局状态类型
-export interface AppState {
-  user: User | null
-  isAuthenticated: boolean
-  isLoading: boolean
-  error: AppError | null
-  settings: AppSettings
-  currentCourse: Course | null
-  currentExam: Exam | null
-  progress: Record<string, Progress>
-  achievements: Achievement[]
+export interface SearchResult {
+  courses: Course[]
+  exams: Exam[]
+  learningPaths: LearningPath[]
   teams: Team[]
-  notifications: Notification[]
+  total: number
 }
 
+// 通知相关类型
 export interface Notification {
   id: string
-  type: "info" | "success" | "warning" | "error"
+  userId: string
+  type: "course-update" | "exam-reminder" | "achievement" | "team-activity" | "system"
   title: string
   message: string
-  read: boolean
-  createdAt: string
-  expiresAt?: string
+  isRead: boolean
+  createdAt: Date
   actionUrl?: string
-  actionText?: string
+  metadata?: Record<string, any>
 }
 
-// 组件 Props 类型
-export interface ComponentProps {
-  className?: string
-  children?: React.ReactNode
-}
-
-export interface ButtonProps extends ComponentProps {
-  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link"
-  size?: "default" | "sm" | "lg" | "icon"
-  disabled?: boolean
-  loading?: boolean
-  onClick?: () => void
-}
-
-export interface CardProps extends ComponentProps {
-  title?: string
-  description?: string
-  image?: string
-  href?: string
-  onClick?: () => void
-}
-
-// 工具类型
-export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
-export type Required<T, K extends keyof T> = T & Required<Pick<T, K>>
-export type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P]
-}
-
-// 数据库类型
-export interface DatabaseUser extends Omit<User, "profile" | "preferences"> {
-  profileId: string
-  preferencesId: string
-}
-
-export interface DatabaseCourse extends Omit<Course, "modules"> {
-  moduleIds: string[]
-}
-
-// 外部服务类型
-export interface PaymentProvider {
+// 评论和评分类型
+export interface Review {
   id: string
-  name: string
-  type: "credit-card" | "paypal" | "alipay" | "wechat"
-  enabled: boolean
-  config: Record<string, any>
+  userId: string
+  user: User
+  courseId?: string
+  examId?: string
+  rating: number // 1-5
+  comment: string
+  isVerified: boolean
+  createdAt: Date
+  updatedAt: Date
+  helpful: number
+  reported: boolean
 }
 
-export interface EmailProvider {
+// 讨论相关类型
+export interface Discussion {
   id: string
-  name: string
-  type: "smtp" | "sendgrid" | "mailgun" | "ses"
-  enabled: boolean
-  config: Record<string, any>
+  title: string
+  content: string
+  authorId: string
+  author: User
+  courseId?: string
+  teamId?: string
+  category: string
+  tags: string[]
+  isSticky: boolean
+  isLocked: boolean
+  viewCount: number
+  replyCount: number
+  createdAt: Date
+  updatedAt: Date
+  replies: DiscussionReply[]
 }
 
-// 分析和报告类型
-export interface AnalyticsData {
+export interface DiscussionReply {
+  id: string
+  content: string
+  authorId: string
+  author: User
+  discussionId: string
+  parentReplyId?: string
+  createdAt: Date
+  updatedAt: Date
+  likes: number
+  isAccepted: boolean
+}
+
+// 证书相关类型
+export interface Certificate {
+  id: string
+  userId: string
+  user: User
+  courseId?: string
+  course?: Course
+  examId?: string
+  exam?: Exam
+  learningPathId?: string
+  learningPath?: LearningPath
+  title: string
+  description: string
+  issuedAt: Date
+  expiresAt?: Date
+  certificateUrl: string
+  verificationCode: string
+  isValid: boolean
+}
+
+// 支付相关类型
+export interface Payment {
+  id: string
+  userId: string
+  amount: number
+  currency: string
+  status: "pending" | "completed" | "failed" | "refunded"
+  paymentMethod: string
+  transactionId?: string
+  courseId?: string
+  learningPathId?: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+// 分析相关类型
+export interface Analytics {
   pageViews: number
   uniqueVisitors: number
-  bounceRate: number
   averageSessionDuration: number
-  conversionRate: number
+  bounceRate: number
   topPages: Array<{
     path: string
     views: number
   }>
-  topCourses: Array<{
-    id: string
-    title: string
+  userEngagement: {
+    dailyActiveUsers: number
+    weeklyActiveUsers: number
+    monthlyActiveUsers: number
+  }
+  courseMetrics: {
     enrollments: number
-  }>
-  userGrowth: Array<{
-    date: string
-    newUsers: number
-    totalUsers: number
-  }>
-}
-
-export interface ReportData {
-  type: "user" | "course" | "exam" | "financial"
-  period: "daily" | "weekly" | "monthly" | "yearly"
-  data: Record<string, any>
-  generatedAt: string
-  generatedBy: string
+    completions: number
+    averageRating: number
+    dropoffRate: number
+  }
 }
