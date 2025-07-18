@@ -264,7 +264,39 @@ export function useCourses(options: UseCoursesOptions = {}) {
         setLoading(true)
         // 模拟API调用延迟
         await new Promise((resolve) => setTimeout(resolve, 500))
-        setCourses(courseData)
+
+        const mockCourses: Course[] = [
+          {
+            id: "gpt-basics",
+            title: "GPT模型基础与应用",
+            description: "深入理解大语言模型的原理和实际应用",
+            image: "/images/gpt-basics-course.png",
+            level: "beginner",
+            duration: "8小时",
+            progress: 75,
+            chapters: 12,
+            category: "AI基础",
+            instructor: "李教授",
+            rating: 4.8,
+            students: 1234,
+          },
+          {
+            id: "prompt-engineering",
+            title: "Prompt Engineering实战",
+            description: "掌握提示词工程的核心技巧和最佳实践",
+            image: "/images/prompt-engineering-course.png",
+            level: "intermediate",
+            duration: "12小时",
+            progress: 45,
+            chapters: 15,
+            category: "AI应用",
+            instructor: "王老师",
+            rating: 4.9,
+            students: 856,
+          },
+        ]
+
+        setCourses(mockCourses)
       } catch (err) {
         setError("获取课程数据失败")
       } finally {

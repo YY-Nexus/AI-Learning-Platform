@@ -2,14 +2,7 @@
 
 import type React from "react"
 import { createContext, useContext, useState, useEffect } from "react"
-
-interface User {
-  id: string
-  name: string
-  email: string
-  avatar: string
-  level: string
-}
+import type { User } from "@/app/types"
 
 interface AuthContextType {
   user: User | null
@@ -25,10 +18,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // 模拟检查用户登录状态
+    // 检查本地存储中的用户信息
     const checkAuth = async () => {
       try {
-        // 模拟从localStorage或API获取用户信息
         const savedUser = localStorage.getItem("user")
         if (savedUser) {
           setUser(JSON.parse(savedUser))
@@ -46,12 +38,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     try {
       // 模拟登录API调用
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
       const mockUser: User = {
         id: "1",
-        name: "YanYu同学",
-        email: email,
+        name: "张同学",
+        email,
         avatar: "/placeholder.svg?height=40&width=40",
-        level: "中级工程师",
+        studyPoints: 2450,
+        studyDays: 77,
+        completedCourses: 12,
+        studyHours: 156,
       }
 
       setUser(mockUser)

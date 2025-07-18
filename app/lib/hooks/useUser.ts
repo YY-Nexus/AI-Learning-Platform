@@ -194,17 +194,13 @@ export function useUser() {
 
         const userData: User = {
           id: "1",
-          name: "YanYu同学",
-          email: "yanyu@smartcloud.com",
-          avatar: "/placeholder.svg?height=80&width=80&text=YY",
-          level: "中级AI工程师",
-          points: 2450,
-          streak: 7,
-          joinDate: "2024年1月",
+          name: "张同学",
+          email: "zhang@example.com",
+          avatar: "/placeholder.svg?height=40&width=40",
+          studyPoints: 2450,
+          studyDays: 77,
           completedCourses: 12,
-          totalStudyTime: 156,
-          certificates: 5,
-          rank: 156,
+          studyHours: 156,
         }
 
         setUser(userData)
@@ -218,7 +214,13 @@ export function useUser() {
     fetchUser()
   }, [])
 
-  return { user, loading, error, setUser }
+  const updateUser = (updates: Partial<User>) => {
+    if (user) {
+      setUser({ ...user, ...updates })
+    }
+  }
+
+  return { user, loading, error, updateUser }
 }
 
 // 用户认证状态Hook
@@ -298,9 +300,9 @@ export function useUserStats() {
   const stats = {
     totalCourses: user ? Object.keys(user.progress).length : 0,
     completedCourses: user?.completedCourses || 0,
-    totalPoints: user?.points || 0,
-    currentStreak: user?.streak || 0,
-    totalStudyTime: user?.totalStudyTime || 0,
+    totalPoints: user?.studyPoints || 0,
+    currentStreak: user?.studyDays || 0,
+    totalStudyTime: user?.studyHours || 0,
     certificates: user?.certificates.length || 0,
   }
 
