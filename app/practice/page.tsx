@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Clock, CheckCircle, XCircle, ArrowLeft, ArrowRight, Trophy, Target, Zap } from "lucide-react"
 import { ResponsiveLayout } from "@/components/responsive-layout"
+import Link from "next/link"
 
 export default function PracticePage() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -137,58 +138,70 @@ export default function PracticePage() {
     return (
       <ResponsiveLayout
         title="练习测试"
-        user={{ name: "张同学", avatar: "/placeholder.svg?height=40&width=40", level: "中级工程师" }}
+        user={{ name: "YanYu同学", avatar: "/placeholder.svg?height=40&width=40", level: "中级工程师" }}
       >
-        <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">练习测试中心</h1>
-          <p className="text-gray-600">通过测试检验您的学习成果，获得学习积分</p>
-        </div>
+        <div className="pb-20">
+          {/* 返回按钮 */}
+          <div className="mb-4">
+            <Button variant="outline" asChild className="flex items-center gap-2">
+              <Link href="/">
+                <ArrowLeft className="h-4 w-4" />
+                返回首页
+              </Link>
+            </Button>
+          </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {practiceTests.map((test) => (
-            <Card
-              key={test.id}
-              className="group hover:shadow-xl transition-all duration-300 transform hover:scale-105 bg-white/80 backdrop-blur-sm border-0 shadow-lg"
-            >
-              <CardHeader className="p-4 sm:p-6">
-                <div className="flex items-start justify-between mb-2">
-                  <CardTitle className="text-base sm:text-lg group-hover:text-indigo-600 transition-colors">
-                    {test.title}
-                  </CardTitle>
-                  <Badge className={getDifficultyColor(test.difficulty)}>{test.difficulty}</Badge>
-                </div>
-                <CardDescription>{test.description}</CardDescription>
-              </CardHeader>
-              <CardContent className="p-4 sm:p-6 pt-0">
-                <div className="space-y-3 mb-6">
-                  <div className="flex items-center justify-between text-sm text-gray-600">
-                    <span className="flex items-center">
-                      <Target className="h-4 w-4 mr-1" />
-                      {test.questions} 题目
-                    </span>
-                    <span className="flex items-center">
-                      <Clock className="h-4 w-4 mr-1" />
-                      {test.duration} 分钟
-                    </span>
+          <div className="mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">练习测试中心</h1>
+            <p className="text-gray-600">通过测试检验您的学习成果，获得学习积分</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {practiceTests.map((test) => (
+              <Card
+                key={test.id}
+                className="group hover:shadow-xl transition-all duration-300 transform hover:scale-105 bg-white/80 backdrop-blur-sm border-0 shadow-lg"
+              >
+                <CardHeader className="p-4 sm:p-6">
+                  <div className="flex items-start justify-between mb-2">
+                    <CardTitle className="text-base sm:text-lg group-hover:text-indigo-600 transition-colors">
+                      {test.title}
+                    </CardTitle>
+                    <Badge className={getDifficultyColor(test.difficulty)}>{test.difficulty}</Badge>
                   </div>
-                  <div className="flex items-center justify-between text-sm text-gray-600">
-                    <span>分类：{test.category}</span>
-                    <span className="flex items-center text-yellow-600">
-                      <Trophy className="h-4 w-4 mr-1" />
-                      {test.points} 积分
-                    </span>
+                  <CardDescription>{test.description}</CardDescription>
+                </CardHeader>
+                <CardContent className="p-4 sm:p-6 pt-0">
+                  <div className="space-y-3 mb-6">
+                    <div className="flex items-center justify-between text-sm text-gray-600">
+                      <span className="flex items-center">
+                        <Target className="h-4 w-4 mr-1" />
+                        {test.questions} 题目
+                      </span>
+                      <span className="flex items-center">
+                        <Clock className="h-4 w-4 mr-1" />
+                        {test.duration} 分钟
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm text-gray-600">
+                      <span>分类：{test.category}</span>
+                      <span className="flex items-center text-yellow-600">
+                        <Trophy className="h-4 w-4 mr-1" />
+                        {test.points} 积分
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <Button
-                  className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                  onClick={handleStartTest}
-                >
-                  <Zap className="h-4 w-4 mr-2" />
-                  开始测试
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+                  <Button
+                    className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                    onClick={handleStartTest}
+                  >
+                    <Zap className="h-4 w-4 mr-2" />
+                    开始测试
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </ResponsiveLayout>
     )
@@ -202,6 +215,16 @@ export default function PracticePage() {
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+        {/* 返回按钮 - 固定在左上角 */}
+        <div className="fixed top-4 left-4 z-10">
+          <Button variant="outline" asChild className="flex items-center gap-2 bg-white/90 backdrop-blur-sm">
+            <Link href="/practice">
+              <ArrowLeft className="h-4 w-4" />
+              返回测试列表
+            </Link>
+          </Button>
+        </div>
+
         <Card className="w-full max-w-2xl shadow-2xl bg-white/90 backdrop-blur-sm">
           <CardHeader className="text-center p-4 sm:p-6">
             <div className="mx-auto mb-4">
@@ -257,7 +280,17 @@ export default function PracticePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4">
-      <div className="max-w-4xl mx-auto">
+      {/* 返回按钮 - 固定在左上角 */}
+      <div className="fixed top-4 left-4 z-10">
+        <Button variant="outline" asChild className="flex items-center gap-2 bg-white/90 backdrop-blur-sm">
+          <Link href="/practice">
+            <ArrowLeft className="h-4 w-4" />
+            返回测试
+          </Link>
+        </Button>
+      </div>
+
+      <div className="max-w-4xl mx-auto pt-16">
         {/* 进度条 */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">

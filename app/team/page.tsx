@@ -7,21 +7,13 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Progress } from "@/components/ui/progress"
+import { ColoredProgress } from "@/components/colored-progress"
+import { ImageFallback } from "@/components/image-fallback"
 import { Users, Plus, Search, Crown, Star, Trophy, Calendar, ArrowLeft, MessageSquare, Target } from "lucide-react"
 import Link from "next/link"
 
 export default function TeamPage() {
   const [searchTerm, setSearchTerm] = useState("")
-
-  const currentUser = {
-    id: 1,
-    name: "张同学",
-    avatar: "/placeholder.svg?height=40&width=40",
-    role: "成员",
-    points: 2450,
-    level: "中级工程师",
-  }
 
   const teams = [
     {
@@ -34,7 +26,7 @@ export default function TeamPage() {
       category: "研究型",
       leader: "李教授",
       joined: true,
-      avatar: "/placeholder.svg?height=60&width=60",
+      avatar: "/images/ai-innovation-lab.png",
       progress: 85,
       weeklyGoal: 15,
       achievements: ["创新先锋", "技术专家"],
@@ -49,7 +41,7 @@ export default function TeamPage() {
       category: "实践型",
       leader: "王工程师",
       joined: false,
-      avatar: "/placeholder.svg?height=60&width=60",
+      avatar: "/images/prompt-engineer-alliance.png",
       progress: 72,
       weeklyGoal: 12,
       achievements: ["提示词大师", "实战专家"],
@@ -64,7 +56,7 @@ export default function TeamPage() {
       category: "学习型",
       leader: "陈助教",
       joined: false,
-      avatar: "/placeholder.svg?height=60&width=60",
+      avatar: "/images/newbie-study-group.png",
       progress: 45,
       weeklyGoal: 8,
       achievements: ["新手导师", "互助之星"],
@@ -82,6 +74,7 @@ export default function TeamPage() {
       status: "在线",
       joinDate: "2023年9月",
       contributions: 156,
+      progress: 95,
     },
     {
       id: 2,
@@ -93,6 +86,7 @@ export default function TeamPage() {
       status: "在线",
       joinDate: "2024年1月",
       contributions: 42,
+      progress: 68,
     },
     {
       id: 3,
@@ -104,6 +98,7 @@ export default function TeamPage() {
       status: "离线",
       joinDate: "2023年11月",
       contributions: 89,
+      progress: 82,
     },
     {
       id: 4,
@@ -115,6 +110,7 @@ export default function TeamPage() {
       status: "在线",
       joinDate: "2023年10月",
       contributions: 73,
+      progress: 76,
     },
   ]
 
@@ -154,40 +150,47 @@ export default function TeamPage() {
   const getLevelColor = (level: string) => {
     switch (level) {
       case "初级":
-        return "bg-green-100 text-green-800"
+        return "bg-emerald-100 text-emerald-800 border border-emerald-300"
       case "中级":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-amber-100 text-amber-800 border border-amber-300"
       case "高级":
-        return "bg-red-100 text-red-800"
+        return "bg-rose-100 text-rose-800 border border-rose-300"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-slate-100 text-slate-800 border border-slate-300"
     }
   }
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "在线":
-        return "bg-green-500"
+        return "bg-emerald-500"
       case "离线":
-        return "bg-gray-400"
+        return "bg-slate-400"
       case "忙碌":
-        return "bg-yellow-500"
+        return "bg-amber-500"
       default:
-        return "bg-gray-400"
+        return "bg-slate-400"
     }
   }
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "高":
-        return "bg-red-100 text-red-800"
+        return "bg-rose-100 text-rose-800 border border-rose-300"
       case "中":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-amber-100 text-amber-800 border border-amber-300"
       case "低":
-        return "bg-green-100 text-green-800"
+        return "bg-emerald-100 text-emerald-800 border border-emerald-300"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-slate-100 text-slate-800 border border-slate-300"
     }
+  }
+
+  const getProgressVariant = (progress: number) => {
+    if (progress >= 80) return "success"
+    if (progress >= 60) return "info"
+    if (progress >= 40) return "warning"
+    return "purple"
   }
 
   return (
@@ -215,6 +218,13 @@ export default function TeamPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* 页面标题 */}
         <div className="mb-8">
+          <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-lg mb-4">
+            <div className="flex items-center">
+              <Users className="h-5 w-5 mr-2" />
+              <span className="font-medium">✅ 团队管理图片已更新！新手学习小组图片已修复！</span>
+            </div>
+            <p className="text-sm mt-1">所有团队都配备了专门设计的中文封面图片，确保文字准确无误。</p>
+          </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">团队管理</h1>
           <p className="text-gray-600">加入学习团队，与同伴一起成长进步</p>
         </div>
@@ -251,16 +261,17 @@ export default function TeamPage() {
                   className="group hover:shadow-xl transition-all duration-300 transform hover:scale-105 bg-white/80 backdrop-blur-sm border-0 shadow-lg"
                 >
                   <div className="relative">
-                    <img
+                    <ImageFallback
                       src={team.avatar || "/placeholder.svg"}
                       alt={team.name}
-                      className="w-full h-32 object-cover rounded-t-lg"
+                      title={team.name}
+                      className="w-full h-32 rounded-t-lg"
                     />
                     <div className="absolute top-4 left-4">
                       <Badge className={getLevelColor(team.level)}>{team.level}</Badge>
                     </div>
                     <div className="absolute top-4 right-4">
-                      <Badge variant="secondary">{team.category}</Badge>
+                      <Badge className="bg-white/90 text-gray-700 border border-gray-200">{team.category}</Badge>
                     </div>
                   </div>
 
@@ -273,7 +284,7 @@ export default function TeamPage() {
                     <div className="space-y-4">
                       <div className="flex items-center justify-between text-sm text-gray-600">
                         <span className="flex items-center">
-                          <Crown className="h-4 w-4 mr-1 text-yellow-500" />
+                          <Crown className="h-4 w-4 mr-1 text-amber-500" />
                           {team.leader}
                         </span>
                         <span>
@@ -284,14 +295,14 @@ export default function TeamPage() {
                       <div className="space-y-2">
                         <div className="flex items-center justify-between text-sm">
                           <span>团队活跃度</span>
-                          <span>{team.progress}%</span>
+                          <span className="font-medium">{team.progress}%</span>
                         </div>
-                        <Progress value={team.progress} />
+                        <ColoredProgress value={team.progress} variant={getProgressVariant(team.progress)} />
                       </div>
 
                       <div className="flex flex-wrap gap-1 mb-4">
                         {team.achievements.map((achievement, index) => (
-                          <Badge key={index} variant="outline" className="text-xs">
+                          <Badge key={index} variant="outline" className="text-xs border-indigo-200 text-indigo-700">
                             {achievement}
                           </Badge>
                         ))}
@@ -300,7 +311,7 @@ export default function TeamPage() {
                       <Button
                         className={`w-full ${
                           team.joined
-                            ? "bg-gray-500 hover:bg-gray-600"
+                            ? "bg-slate-500 hover:bg-slate-600"
                             : "bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"
                         } text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300`}
                         disabled={team.joined}
@@ -341,22 +352,35 @@ export default function TeamPage() {
                             className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${getStatusColor(member.status)}`}
                           />
                         </div>
-                        <div>
+                        <div className="flex-1">
                           <div className="flex items-center space-x-2">
                             <h3 className="font-semibold text-gray-900">{member.name}</h3>
-                            {member.role === "团队领导" && <Crown className="h-4 w-4 text-yellow-500" />}
+                            {member.role === "团队领导" && <Crown className="h-4 w-4 text-amber-500" />}
                           </div>
                           <p className="text-sm text-gray-600">
                             {member.role} • {member.level}
                           </p>
                           <p className="text-xs text-gray-500">加入时间: {member.joinDate}</p>
+
+                          {/* 成员学习进度 */}
+                          <div className="mt-2 w-32">
+                            <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+                              <span>学习进度</span>
+                              <span>{member.progress}%</span>
+                            </div>
+                            <ColoredProgress
+                              value={member.progress}
+                              size="sm"
+                              variant={getProgressVariant(member.progress)}
+                            />
+                          </div>
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="flex items-center space-x-4 text-sm text-gray-600">
+                        <div className="flex items-center space-x-4 text-sm text-gray-600 mb-2">
                           <div>
                             <span className="flex items-center">
-                              <Trophy className="h-4 w-4 mr-1 text-yellow-500" />
+                              <Trophy className="h-4 w-4 mr-1 text-amber-500" />
                               {member.points} 积分
                             </span>
                           </div>
@@ -367,7 +391,11 @@ export default function TeamPage() {
                             </span>
                           </div>
                         </div>
-                        <Button variant="outline" size="sm" className="mt-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="border-indigo-200 text-indigo-600 hover:bg-indigo-50"
+                        >
                           <MessageSquare className="h-4 w-4 mr-1" />
                           私信
                         </Button>
@@ -411,32 +439,36 @@ export default function TeamPage() {
                         <span>项目进度</span>
                         <span className="font-medium">{project.progress}%</span>
                       </div>
-                      <Progress value={project.progress} />
+                      <ColoredProgress value={project.progress} variant={getProgressVariant(project.progress)} />
 
                       <div className="flex items-center justify-between text-sm text-gray-600">
                         <span className="flex items-center">
-                          <Users className="h-4 w-4 mr-1" />
+                          <Users className="h-4 w-4 mr-1 text-indigo-500" />
                           {project.members} 成员
                         </span>
                         <span className="flex items-center">
-                          <Calendar className="h-4 w-4 mr-1" />
+                          <Calendar className="h-4 w-4 mr-1 text-amber-500" />
                           {project.deadline}
                         </span>
                       </div>
 
                       <div className="flex items-center justify-between">
                         <Badge
-                          variant={
+                          className={
                             project.status === "已完成"
-                              ? "default"
+                              ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
                               : project.status === "进行中"
-                                ? "secondary"
-                                : "outline"
+                                ? "bg-blue-100 text-blue-800 border border-blue-300"
+                                : "bg-slate-100 text-slate-800 border border-slate-300"
                           }
                         >
                           {project.status}
                         </Badge>
-                        <Button variant="outline" size="sm">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="border-indigo-200 text-indigo-600 hover:bg-indigo-50"
+                        >
                           <Target className="h-4 w-4 mr-1" />
                           查看详情
                         </Button>

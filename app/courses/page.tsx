@@ -27,6 +27,8 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { courseData } from "@/data/course-data"
+import { CourseImage } from "@/components/course-image"
+import { ResponsiveLayout } from "@/components/responsive-layout"
 
 export default function CoursesPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -119,8 +121,15 @@ export default function CoursesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      <div className="container mx-auto px-4 py-6">
+    <ResponsiveLayout
+      title="课程中心"
+      user={{
+        name: "YanYu同学",
+        avatar: "/placeholder.svg?height=40&width=40",
+        level: "中级工程师",
+      }}
+    >
+      <div className="pb-20">
         {/* 页面标题 */}
         <div className="mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">AI学习中心</h1>
@@ -247,10 +256,11 @@ export default function CoursesPage() {
               className="hover:shadow-xl transition-all duration-300 bg-white border border-gray-200 shadow-md overflow-hidden"
             >
               <div className="relative overflow-hidden">
-                <img
+                <CourseImage
                   src={course.image || "/placeholder.svg"}
                   alt={course.title}
-                  className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+                  title={course.title}
+                  color={course.color}
                 />
                 <div className="absolute top-4 left-4">
                   <Badge className={getLevelColor(course.level)}>{course.level}</Badge>
@@ -459,6 +469,6 @@ export default function CoursesPage() {
           </div>
         )}
       </div>
-    </div>
+    </ResponsiveLayout>
   )
 }

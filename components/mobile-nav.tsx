@@ -8,6 +8,7 @@ import { Menu, X, BookOpen, Brain, Users, TrendingUp, Home, LogOut, Target, Grad
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { FocusTrap } from "./accessibility/focus-trap"
+import { BrandHeader } from "./brand-header"
 
 interface MobileNavProps {
   user: {
@@ -58,10 +59,7 @@ export function MobileNav({ user }: MobileNavProps) {
         <FocusTrap active={open}>
           <SheetHeader className="border-b pb-4 mb-4">
             <SheetTitle className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Brain className="h-6 w-6 text-indigo-600" aria-hidden="true" />
-                <span className="text-xl font-bold">AI学习系统</span>
-              </div>
+              <BrandHeader showSubtitle={false} size="sm" />
               <Button variant="ghost" size="icon" onClick={() => setOpen(false)} aria-label="关闭导航菜单">
                 <X className="h-5 w-5" aria-hidden="true" />
               </Button>
@@ -69,8 +67,8 @@ export function MobileNav({ user }: MobileNavProps) {
           </SheetHeader>
 
           <div className="flex flex-col space-y-6">
-            <div className="flex items-center space-x-4 p-4 bg-indigo-50 rounded-lg">
-              <Avatar className="h-12 w-12 border-2 border-indigo-200">
+            <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+              <Avatar className="h-12 w-12 border-2 border-blue-200">
                 <AvatarImage src={user.avatar || "/placeholder.svg"} alt={`${user.name}的头像`} />
                 <AvatarFallback>{user.name[0]}</AvatarFallback>
               </Avatar>
@@ -90,7 +88,9 @@ export function MobileNav({ user }: MobileNavProps) {
                     key={route.href}
                     variant={active ? "default" : "ghost"}
                     className={`w-full justify-start focus:ring-2 focus:ring-blue-500 ${
-                      active ? "bg-indigo-600 text-white hover:bg-indigo-700" : "hover:bg-indigo-50"
+                      active
+                        ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700"
+                        : "hover:bg-blue-50"
                     }`}
                     asChild
                     onClick={() => setOpen(false)}

@@ -1,14 +1,15 @@
 import type { ReactNode } from "react"
 import { MobileNav } from "./mobile-nav"
 import { BottomNav } from "./bottom-nav"
+import { BrandHeader } from "./brand-header"
+import { BrandFooter } from "./brand-footer"
 import { SkipLink } from "./accessibility/skip-link"
-import { Brain } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
 interface ResponsiveLayoutProps {
   children: ReactNode
-  title: string
+  title?: string
   user: {
     name: string
     avatar: string
@@ -31,10 +32,13 @@ export function ResponsiveLayout({ children, title, user }: ResponsiveLayoutProp
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <MobileNav user={user} />
-              <div className="flex items-center space-x-2">
-                <Brain className="h-6 w-6 text-indigo-700" aria-hidden="true" />
-                <h1 className="text-lg font-semibold text-gray-900 truncate max-w-[150px] sm:max-w-none">{title}</h1>
-              </div>
+              <BrandHeader showSubtitle={false} size="sm" />
+              {title && (
+                <div className="hidden sm:block">
+                  <span className="text-gray-400 mx-2">|</span>
+                  <span className="text-lg font-semibold text-gray-900">{title}</span>
+                </div>
+              )}
             </div>
             <div className="hidden md:flex items-center space-x-4" role="menubar">
               <Button
@@ -111,6 +115,9 @@ export function ResponsiveLayout({ children, title, user }: ResponsiveLayoutProp
       >
         {children}
       </main>
+
+      {/* 品牌页脚 */}
+      <BrandFooter />
 
       {/* 底部导航 - 确保在移动端显示 */}
       <BottomNav />

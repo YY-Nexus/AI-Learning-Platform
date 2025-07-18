@@ -9,10 +9,11 @@ interface ColoredProgressProps extends React.HTMLAttributes<HTMLDivElement> {
   color?: string
   size?: "sm" | "md" | "lg"
   showPercentage?: boolean
+  variant?: "default" | "success" | "warning" | "info" | "purple" | "pink"
 }
 
 const ColoredProgress = React.forwardRef<HTMLDivElement, ColoredProgressProps>(
-  ({ className, value, max = 100, color, size = "md", showPercentage = false, ...props }, ref) => {
+  ({ className, value, max = 100, color, size = "md", showPercentage = false, variant = "default", ...props }, ref) => {
     const percentage = Math.min(Math.max((value / max) * 100, 0), 100)
 
     const sizeClasses = {
@@ -21,8 +22,26 @@ const ColoredProgress = React.forwardRef<HTMLDivElement, ColoredProgressProps>(
       lg: "h-4",
     }
 
-    // 默认使用彩色渐变，确保不是黑色
-    const progressColor = color || "bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600"
+    // 彩色主题变体
+    const getVariantColor = (variant: string) => {
+      switch (variant) {
+        case "success":
+          return "linear-gradient(90deg, #10b981 0%, #34d399 50%, #6ee7b7 100%)"
+        case "warning":
+          return "linear-gradient(90deg, #f59e0b 0%, #fbbf24 50%, #fcd34d 100%)"
+        case "info":
+          return "linear-gradient(90deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%)"
+        case "purple":
+          return "linear-gradient(90deg, #8b5cf6 0%, #a78bfa 50%, #c4b5fd 100%)"
+        case "pink":
+          return "linear-gradient(90deg, #ec4899 0%, #f472b6 50%, #f9a8d4 100%)"
+        default:
+          return "linear-gradient(90deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%)"
+      }
+    }
+
+    // 使用自定义颜色或变体颜色，绝不使用黑色
+    const progressColor = color || getVariantColor(variant)
 
     return (
       <div className="w-full">
@@ -32,16 +51,25 @@ const ColoredProgress = React.forwardRef<HTMLDivElement, ColoredProgressProps>(
           {...props}
         >
           <div
-            className={cn("h-full transition-all duration-700 ease-out rounded-full shadow-sm", progressColor)}
+            className={cn("h-full transition-all duration-700 ease-out rounded-full shadow-sm")}
             style={{
               width: `${percentage}%`,
-              background: color || "linear-gradient(90deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%)",
+              background: progressColor,
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            }}
+          />
+          {/* 添加光泽效果 */}
+          <div
+            className="absolute top-0 left-0 h-full rounded-full opacity-30"
+            style={{
+              width: `${percentage}%`,
+              background: "linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, transparent 50%, rgba(0,0,0,0.1) 100%)",
             }}
           />
         </div>
         {showPercentage && (
           <div className="flex justify-between text-xs text-gray-600 mt-1">
-            <span>{Math.round(percentage)}%</span>
+            <span className="font-medium">{Math.round(percentage)}%</span>
             <span>
               {value}/{max}
             </span>

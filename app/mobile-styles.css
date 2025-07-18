@@ -1,17 +1,25 @@
-/* 移动端优化样式 - 强制显示底部导航 */
-@media (max-width: 768px) {
-  /* 确保页面内容不被底部导航遮挡 */
-  body {
-    padding-bottom: 5rem !important;
-  }
+/* 移动端底部导航样式 */
+.bottom-nav,
+nav[data-bottom-nav],
+[data-bottom-nav="true"] {
+  display: none;
+}
 
-  /* 主内容区域底部间距 */
+/* 移动端视图 - 强制显示底部导航 */
+@media (max-width: 767px) {
+  /* 确保内容不被底部导航遮挡 */
+  body,
   main,
   .main-content {
-    padding-bottom: 5rem !important;
+    padding-bottom: clamp(4rem, 12vh, 5rem) !important;
+  }
+  
+  /* 安全区域适配 */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0.5rem) !important;
   }
 
-  /* 底部导航样式 - 强制显示 */
+  /* 底部导航样式 */
   .bottom-nav,
   nav[data-bottom-nav],
   [data-bottom-nav="true"] {
@@ -26,11 +34,11 @@
     background-color: white !important;
     border-top: 1px solid #e5e7eb !important;
     box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1) !important;
-    height: 4rem !important;
+    height: clamp(3.5rem, 10vh, 4rem) !important;
     width: 100% !important;
   }
 
-  /* 确保底部导航内容正确显示 */
+  /* 导航内容布局 */
   .bottom-nav > div,
   nav[data-bottom-nav] > div {
     display: flex !important;
@@ -49,13 +57,14 @@
     align-items: center !important;
     justify-content: center !important;
     flex: 1 !important;
-    height: 100% !important;
+    min-height: 44px !important;
+    min-width: 44px !important;
     padding: 0.5rem 0.25rem !important;
     border-radius: 0.5rem !important;
     transition: all 0.2s ease !important;
     text-decoration: none !important;
     color: #6b7280 !important;
-    min-height: 44px !important;
+    -webkit-tap-highlight-color: transparent !important;
   }
 
   /* 活跃状态 */
@@ -63,64 +72,39 @@
   nav[data-bottom-nav] a[aria-current="page"] {
     color: #2563eb !important;
     background-color: #dbeafe !important;
+    font-weight: 600 !important;
   }
 
-  /* 悬停状态 */
+  /* 悬停和聚焦状态 */
   .bottom-nav a:hover,
-  nav[data-bottom-nav] a:hover {
+  .bottom-nav a:focus-visible,
+  nav[data-bottom-nav] a:hover,
+  nav[data-bottom-nav] a:focus-visible {
     color: #3b82f6 !important;
     background-color: #f3f4f6 !important;
+    outline: none !important;
   }
 
   /* 图标样式 */
   .bottom-nav svg,
   nav[data-bottom-nav] svg {
-    width: 1.5rem !important;
-    height: 1.5rem !important;
+    width: clamp(1.25rem, 4vw, 1.5rem) !important;
+    height: clamp(1.25rem, 4vw, 1.5rem) !important;
     margin-bottom: 0.25rem !important;
   }
 
   /* 文字样式 */
   .bottom-nav span,
   nav[data-bottom-nav] span {
-    font-size: 0.75rem !important;
+    font-size: clamp(0.65rem, 2vw, 0.75rem) !important;
     font-weight: 500 !important;
     line-height: 1rem !important;
-  }
-
-  /* 触摸优化 */
-  .touch-target {
-    min-height: 44px !important;
-    min-width: 44px !important;
-  }
-
-  /* 安全区域适配 */
-  .pb-safe {
-    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
-  }
-
-  /* 强制显示 - 覆盖任何隐藏样式 */
-  .md\:hidden {
-    display: flex !important;
+    white-space: nowrap !important;
   }
 
   /* 确保在桌面端隐藏 */
-  @media (min-width: 769px) {
-    .bottom-nav,
-    nav[data-bottom-nav] {
-      display: none !important;
-    }
-  }
-}
-
-/* 全局样式 - 确保底部导航始终可见 */
-.bottom-nav {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .bottom-nav {
-    display: flex !important;
+  .bottom-nav.md\:hidden {
+    display: none !important;
   }
 }
 

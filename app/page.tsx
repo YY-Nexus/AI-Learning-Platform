@@ -1,22 +1,55 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { BookOpen, Brain, Users, Trophy, Clock, Target, Play, CheckCircle, Star } from "lucide-react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { 
+  BookOpen, Brain, Users, Trophy, Clock, Target, Play, CheckCircle, Star 
+} from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { ResponsiveLayout } from "@/components/responsive-layout";
+
+// 类型定义（增强类型安全）
+type User = {
+  name: string;
+  avatar: string;
+  level: string;
+  points: number;
+  streak: number;
+};
+
+type Course = {
+  id: number;
+  title: string;
+  description: string;
+  progress: number;
+  chapters: number;
+  completed: number;
+  difficulty: "初级" | "中级" | "高级";
+  duration: string;
+  image: string;
+  color: string;
+};
+
+type Activity = {
+  type: string;
+  content: string;
+  time: string;
+  icon: React.ComponentType<React.ComponentProps<typeof CheckCircle>>; // 图标组件类型
+};
 
 export default function Dashboard() {
-  const [currentUser] = useState({
+  // 静态数据无需状态管理，直接定义为常量
+  const currentUser: User = {
     name: "张同学",
     avatar: "/placeholder.svg?height=40&width=40",
     level: "中级工程师",
     points: 2450,
     streak: 7,
-  })
+  };
 
-  const courses = [
+  const courses: Course[] = [
     {
       id: 1,
       title: "GPT模型基础与应用",
@@ -26,7 +59,7 @@ export default function Dashboard() {
       completed: 9,
       difficulty: "初级",
       duration: "8小时",
-      image: "/placeholder.svg?height=200&width=300&text=GPT基础课程",
+      image: "/images/gpt-basics-course.png",
       color: "bg-gradient-to-r from-green-500 to-emerald-600",
     },
     {
@@ -38,7 +71,7 @@ export default function Dashboard() {
       completed: 7,
       difficulty: "中级",
       duration: "12小时",
-      image: "/placeholder.svg?height=200&width=300&text=Prompt工程课程",
+      image: "/images/prompt-engineering-course.png",
       color: "bg-gradient-to-r from-blue-500 to-indigo-600",
     },
     {
@@ -50,32 +83,32 @@ export default function Dashboard() {
       completed: 4,
       difficulty: "高级",
       duration: "16小时",
-      image: "/placeholder.svg?height=200&width=300&text=AI开发框架课程",
+      image: "/images/ai-development-course.png",
       color: "bg-gradient-to-r from-purple-500 to-violet-600",
     },
-  ]
+  ];
 
-  const recentActivities = [
+  const recentActivities: Activity[] = [
     { type: "完成章节", content: "GPT-4 API集成实践", time: "2小时前", icon: CheckCircle },
     { type: "通过测试", content: "Prompt优化技巧测验", time: "1天前", icon: Trophy },
     { type: "加入团队", content: "AI创新实验室", time: "3天前", icon: Users },
     { type: "获得徽章", content: "连续学习7天", time: "1周前", icon: Star },
-  ]
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <ResponsiveLayout title="学习中心" user={currentUser}>
       <div className="container mx-auto px-4 py-6">
         {/* 欢迎区域 */}
         <header className="mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">欢迎回来，{currentUser.name}！</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+            欢迎回来，{currentUser.name}！
+          </h1>
           <p className="text-gray-600">继续您的AI学习之旅，掌握前沿技术</p>
         </header>
 
         {/* 统计卡片 */}
         <section aria-labelledby="stats-heading" className="mb-6">
-          <h2 id="stats-heading" className="sr-only">
-            学习统计概览
-          </h2>
+          <h2 id="stats-heading" className="sr-only">学习统计概览</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg">
               <CardContent className="p-4">
@@ -158,11 +191,8 @@ export default function Dashboard() {
                             </h3>
                             <Badge
                               variant={
-                                course.difficulty === "初级"
-                                  ? "default"
-                                  : course.difficulty === "中级"
-                                    ? "secondary"
-                                    : "destructive"
+                                course.difficulty === "初级" ? "default" :
+                                course.difficulty === "中级" ? "secondary" : "destructive"
                               }
                             >
                               {course.difficulty}
@@ -171,9 +201,7 @@ export default function Dashboard() {
                           <p className="text-sm text-gray-600 mb-3">{course.description}</p>
                           <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center space-x-4 text-sm text-gray-500">
-                              <span>
-                                {course.completed}/{course.chapters} 章节
-                              </span>
+                              <span>{course.completed}/{course.chapters} 章节</span>
                               <span>{course.duration}</span>
                             </div>
                           </div>
@@ -184,8 +212,14 @@ export default function Dashboard() {
                                 style={{ width: `${course.progress}%` }}
                               ></div>
                             </div>
-                            <span className="text-sm font-medium text-blue-600 mr-4">{course.progress}%</span>
-                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white" asChild>
+                            <span className="text-sm font-medium text-blue-600 mr-4">
+                              {course.progress}%
+                            </span>
+                            <Button 
+                              size="sm" 
+                              className="bg-blue-600 hover:bg-blue-700 text-white" 
+                              asChild
+                            >
                               <Link href={`/courses/${course.id}`}>
                                 <Play className="h-4 w-4 mr-1" />
                                 继续学习
@@ -215,7 +249,7 @@ export default function Dashboard() {
                 <CardContent>
                   <ul className="space-y-4">
                     {recentActivities.map((activity, index) => {
-                      const IconComponent = activity.icon
+                      const IconComponent = activity.icon;
                       return (
                         <li key={index} className="flex items-start space-x-3">
                           <div className="flex-shrink-0">
@@ -227,7 +261,7 @@ export default function Dashboard() {
                             <time className="text-xs text-gray-400">{activity.time}</time>
                           </div>
                         </li>
-                      )
+                      );
                     })}
                   </ul>
                 </CardContent>
@@ -241,19 +275,30 @@ export default function Dashboard() {
                   <CardTitle id="quick-actions-heading">快速操作</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" asChild>
+                  <Button 
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white" 
+                    asChild
+                  >
                     <Link href="/practice">
                       <Brain className="h-4 w-4 mr-2" />
                       开始练习
                     </Link>
                   </Button>
-                  <Button variant="outline" className="w-full border-2 hover:bg-gray-50" asChild>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-2 hover:bg-gray-50" 
+                    asChild
+                  >
                     <Link href="/courses">
                       <BookOpen className="h-4 w-4 mr-2" />
                       浏览课程
                     </Link>
                   </Button>
-                  <Button variant="outline" className="w-full border-2 hover:bg-gray-50" asChild>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-2 hover:bg-gray-50" 
+                    asChild
+                  >
                     <Link href="/team">
                       <Users className="h-4 w-4 mr-2" />
                       团队协作
@@ -265,6 +310,6 @@ export default function Dashboard() {
           </aside>
         </div>
       </div>
-    </div>
-  )
+    </ResponsiveLayout>
+  );
 }

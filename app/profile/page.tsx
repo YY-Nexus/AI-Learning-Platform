@@ -19,15 +19,19 @@ import {
   HelpCircle,
   TrendingUp,
   CheckCircle,
+  User,
+  MapPin,
+  Phone,
+  Briefcase,
 } from "lucide-react"
 import Link from "next/link"
 
 export default function ProfilePage() {
   const [currentUser] = useState({
-    name: "张同学",
-    email: "zhang@example.com",
-    avatar: "/placeholder.svg?height=80&width=80&text=张",
-    level: "中级工程师",
+    name: "YanYu同学",
+    email: "yanyu@smartcloud.com",
+    avatar: "/placeholder.svg?height=80&width=80&text=YY",
+    level: "中级AI工程师",
     points: 2450,
     streak: 7,
     joinDate: "2024年1月",
@@ -35,6 +39,14 @@ export default function ProfilePage() {
     totalStudyTime: 156,
     certificates: 5,
     rank: 156,
+    // 新增个人信息
+    phone: "+86 138-0000-0000",
+    location: "北京市海淀区",
+    company: "YanYu智能科技",
+    position: "AI算法工程师",
+    bio: "专注于AI技术研发与应用，致力于推动人工智能在各行业的落地实践。",
+    skills: ["机器学习", "深度学习", "自然语言处理", "计算机视觉", "Python", "TensorFlow"],
+    interests: ["AI前沿技术", "开源项目", "技术分享", "团队协作"],
   })
 
   return (
@@ -46,7 +58,7 @@ export default function ProfilePage() {
             <CheckCircle className="h-5 w-5 mr-2" />
             <span className="font-medium">✅ 个人资料页面加载成功！</span>
           </div>
-          <p className="text-sm mt-1">底部菜单"我的"按钮跳转功能正常工作。</p>
+          <p className="text-sm mt-1">用户信息已更新为 YanYu同学，品牌标识优化完成。</p>
         </div>
 
         {/* 页面标题 */}
@@ -55,38 +67,101 @@ export default function ProfilePage() {
           <p className="text-gray-600 mt-2">管理您的学习档案和个人信息</p>
         </div>
 
-        {/* 用户信息卡片 */}
+        {/* 用户信息卡片 - 增强版 */}
         <Card className="shadow-lg border-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white overflow-hidden">
           <CardContent className="p-6 relative">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12"></div>
-            <div className="relative flex items-center space-x-4">
-              <Avatar className="h-20 w-20 border-4 border-white/30 shadow-lg">
-                <AvatarImage src={currentUser.avatar || "/placeholder.svg"} alt={currentUser.name} />
-                <AvatarFallback className="text-blue-600 text-xl font-bold bg-white">
-                  {currentUser.name.charAt(0)}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1">
-                <h1 className="text-2xl font-bold mb-1 text-white">{currentUser.name}</h1>
-                <p className="text-white/90 mb-2 font-medium">{currentUser.email}</p>
-                <div className="flex items-center space-x-4">
-                  <Badge className="bg-white/25 text-white border-white/40 backdrop-blur-sm font-medium">
-                    {currentUser.level}
-                  </Badge>
-                  <span className="text-sm text-white/80 font-medium">加入时间：{currentUser.joinDate}</span>
+            <div className="relative">
+              <div className="flex items-center space-x-4 mb-6">
+                <Avatar className="h-20 w-20 border-4 border-white/30 shadow-lg">
+                  <AvatarImage src={currentUser.avatar || "/placeholder.svg"} alt={currentUser.name} />
+                  <AvatarFallback className="text-blue-600 text-xl font-bold bg-white">YY</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <h1 className="text-2xl font-bold mb-1 text-white">{currentUser.name}</h1>
+                  <p className="text-white/90 mb-2 font-medium">{currentUser.email}</p>
+                  <div className="flex items-center space-x-4">
+                    <Badge className="bg-white/25 text-white border-white/40 backdrop-blur-sm font-medium">
+                      {currentUser.level}
+                    </Badge>
+                    <span className="text-sm text-white/80 font-medium">加入时间：{currentUser.joinDate}</span>
+                  </div>
+                </div>
+                <Button
+                  className="bg-white hover:bg-gray-50 text-blue-700 font-semibold border-0 shadow-lg hover:shadow-xl transition-all duration-200"
+                  size="sm"
+                  asChild
+                >
+                  <Link href="/profile/edit">
+                    <Edit className="h-4 w-4 mr-2" />
+                    编辑资料
+                  </Link>
+                </Button>
+              </div>
+
+              {/* 新增详细个人信息 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-white/90">
+                <div className="flex items-center space-x-2">
+                  <Phone className="h-4 w-4" />
+                  <span className="text-sm">{currentUser.phone}</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <MapPin className="h-4 w-4" />
+                  <span className="text-sm">{currentUser.location}</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Briefcase className="h-4 w-4" />
+                  <span className="text-sm">{currentUser.company}</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <User className="h-4 w-4" />
+                  <span className="text-sm">{currentUser.position}</span>
                 </div>
               </div>
-              <Button
-                className="bg-white hover:bg-gray-50 text-blue-700 font-semibold border-0 shadow-lg hover:shadow-xl transition-all duration-200"
-                size="sm"
-                asChild
-              >
-                <Link href="/profile/edit">
-                  <Edit className="h-4 w-4 mr-2" />
-                  编辑资料
-                </Link>
-              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* 个人简介 */}
+        <Card className="shadow-lg border-2 border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2 text-gray-800">
+              <User className="h-5 w-5 text-blue-700" />
+              <span>个人简介</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-700 leading-relaxed mb-4">{currentUser.bio}</p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-3 flex items-center">
+                  <Star className="h-4 w-4 mr-2 text-yellow-600" />
+                  专业技能
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {currentUser.skills.map((skill, index) => (
+                    <Badge key={index} variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-200">
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-3 flex items-center">
+                  <Target className="h-4 w-4 mr-2 text-green-600" />
+                  兴趣领域
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {currentUser.interests.map((interest, index) => (
+                    <Badge key={index} variant="outline" className="border-green-300 text-green-700 hover:bg-green-50">
+                      {interest}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
