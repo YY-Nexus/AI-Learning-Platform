@@ -51,3 +51,31 @@ export function throttle<T extends (...args: any[]) => any>(func: T, limit: numb
     }
   }
 }
+
+export function calculateProgress(completed: number, total: number): number {
+  if (total === 0) return 0
+  return Math.round((completed / total) * 100)
+}
+
+export function truncateText(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text
+  return text.slice(0, maxLength) + "..."
+}
+
+export function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email)
+}
+
+export function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .map((word) => word.charAt(0))
+    .join("")
+    .toUpperCase()
+    .slice(0, 2)
+}
+
+export function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
