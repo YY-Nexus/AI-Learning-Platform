@@ -1,26 +1,37 @@
 // 用户相关类型
 export interface User {
   id: string
-  username: string
+  name: string
   email: string
   avatar?: string
-  displayName: string
+  role: "student" | "teacher" | "admin"
+  createdAt: Date
+  updatedAt: Date
+  displayName?: string
   bio?: string
-  level: number
-  experience: number
-  totalPoints: number
-  streak: number
-  joinedAt: Date
-  lastActiveAt: Date
-  preferences: UserPreferences
-  stats: UserStats
+  level?: number
+  experience?: number
+  totalPoints?: number
+  streak?: number
+  joinedAt?: Date
+  lastActiveAt?: Date
+  preferences?: UserPreferences
+  stats?: UserStats
 }
 
 export interface UserPreferences {
   theme: "light" | "dark" | "system"
   language: "zh-CN" | "en-US"
-  notifications: NotificationSettings
-  privacy: PrivacySettings
+  notifications: {
+    email: boolean
+    push: boolean
+    sms: boolean
+  }
+  privacy: {
+    profileVisible: boolean
+    progressVisible: boolean
+    achievementsVisible: boolean
+  }
 }
 
 export interface NotificationSettings {
@@ -55,23 +66,21 @@ export interface Course {
   id: string
   title: string
   description: string
-  instructor: string
-  category: CourseCategory
-  level: CourseLevel
-  duration: number
-  price: number
+  image: string
+  duration: string
+  level: "beginner" | "intermediate" | "advanced"
+  students: number
   rating: number
-  reviewCount: number
-  enrollmentCount: number
-  thumbnail: string
+  price: number
+  instructor: string
+  chapters: string[]
+  category: string
   tags: string[]
-  prerequisites: string[]
-  learningObjectives: string[]
-  syllabus: CourseSyllabus[]
   createdAt: Date
   updatedAt: Date
-  isPublished: boolean
-  isFeatured: boolean
+  isPublished?: boolean
+  isFeatured?: boolean
+  syllabus?: CourseSyllabus[]
 }
 
 export interface CourseSyllabus {
@@ -127,17 +136,17 @@ export interface Exam {
   id: string
   title: string
   description: string
-  category: ExamCategory
-  level: ExamLevel
   duration: number
-  totalQuestions: number
+  questionCount: number
+  difficulty: "easy" | "medium" | "hard"
+  category: string
   passingScore: number
-  maxAttempts: number
-  isPublic: boolean
-  prerequisites: string[]
-  tags: string[]
+  questions: Question[]
   createdAt: Date
   updatedAt: Date
+  isPublic?: boolean
+  prerequisites?: string[]
+  tags?: string[]
 }
 
 export interface ExamAttempt {
@@ -164,23 +173,32 @@ export interface ExamAnswer {
 
 export interface Question {
   id: string
-  examId: string
+  text: string
   type: QuestionType
-  question: string
-  options: QuestionOption[]
-  correctAnswer: string | string[]
-  explanation: string
-  difficulty: QuestionDifficulty
-  category: string
-  tags: string[]
+  options?: string[]
+  correctAnswer: string | number
+  explanation?: string
   points: number
-  order: number
 }
 
-export interface QuestionOption {
+export interface ExamResult {
   id: string
-  text: string
+  examId: string
+  userId: string
+  score: number
+  totalPoints: number
+  percentage: number
+  passed: boolean
+  answers: UserAnswer[]
+  startedAt: Date
+  completedAt: Date
+}
+
+export interface UserAnswer {
+  questionId: string
+  answer: string | number
   isCorrect: boolean
+  points: number
 }
 
 export type ExamCategory = "certification" | "assessment" | "practice" | "mock" | "final"
@@ -198,15 +216,16 @@ export interface Team {
   id: string
   name: string
   description: string
-  avatar?: string
-  type: TeamType
-  privacy: TeamPrivacy
+  image: string
   memberCount: number
-  maxMembers: number
-  createdBy: string
+  category: string
+  isPublic: boolean
   createdAt: Date
-  tags: string[]
-  stats: TeamStats
+  updatedAt: Date
+  tags?: string[]
+  stats?: TeamStats
+  type?: TeamType
+  privacy?: TeamPrivacy
 }
 
 export interface TeamMember {
@@ -240,16 +259,17 @@ export interface LearningPath {
   id: string
   title: string
   description: string
-  category: string
-  level: CourseLevel
-  estimatedDuration: number
+  image: string
   courses: string[]
-  prerequisites: string[]
-  skills: string[]
-  certificate?: Certificate
+  estimatedDuration: string
+  difficulty: "beginner" | "intermediate" | "advanced"
+  category: string
   createdAt: Date
   updatedAt: Date
-  isPublished: boolean
+  isPublished?: boolean
+  prerequisites?: string[]
+  skills?: string[]
+  certificate?: Certificate
 }
 
 export interface LearningProgress {
@@ -278,13 +298,11 @@ export interface Achievement {
   title: string
   description: string
   icon: string
-  category: AchievementCategory
-  type: AchievementType
-  criteria: AchievementCriteria
-  reward: AchievementReward
-  rarity: AchievementRarity
-  isHidden: boolean
-  createdAt: Date
+  type: "course" | "exam" | "streak" | "social"
+  requirement: string
+  points: number
+  rarity: "common" | "rare" | "epic" | "legendary"
+  unlockedAt?: Date
 }
 
 export interface UserAchievement {
@@ -351,6 +369,14 @@ export interface ApiResponse<T = any> {
   pagination?: PaginationInfo
 }
 
+export interface PaginatedResponse<T> {
+  data: T[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+}
+
 export interface PaginationInfo {
   page: number
   limit: number
@@ -394,6 +420,10 @@ export interface CourseForm {
   learningObjectives: string[]
 }
 
+export interface FormData {
+  [key: string]: any
+}
+
 // 统计数据类型
 export interface DashboardStats {
   totalUsers: number
@@ -428,6 +458,17 @@ export interface CategoryProgress {
   progress: number
   timeSpent: number
   coursesCompleted: number
+}
+
+export interface Statistics {
+  totalUsers: number
+  totalCourses: number
+  totalExams: number
+  totalTeams: number
+  activeUsers: number
+  completedCourses: number
+  passedExams: number
+  averageScore: number
 }
 
 // 设置相关类型
@@ -475,23 +516,24 @@ export interface SearchResult {
 
 export interface SearchFilters {
   type?: string[]
-  category?: string[]
-  level?: string[]
-  price?: [number, number]
+  category?: string
+  level?: string
+  duration?: string
   rating?: number
-  duration?: [number, number]
-  language?: string[]
+  price?: "free" | "paid"
+  sortBy?: "newest" | "popular" | "rating" | "price"
+  sortOrder?: "asc" | "desc"
 }
 
 // 通知相关类型
 export interface Notification {
   id: string
   userId: string
-  type: NotificationType
+  type: "info" | "success" | "warning" | "error"
   title: string
   message: string
   data?: Record<string, any>
-  isRead: boolean
+  read: boolean
   createdAt: Date
   expiresAt?: Date
 }
@@ -651,7 +693,7 @@ export interface QuizQuestion {
   id: string
   type: QuestionType
   question: string
-  options: QuestionOption[]
+  options: string[]
   correctAnswer: string | string[]
   explanation: string
   points: number
@@ -686,3 +728,31 @@ export interface QuizAttempt {
   currentQuestion: number
   answers: QuizAnswer[]
 }
+
+export interface UserSettings {
+  userId: string
+  theme: "light" | "dark" | "system"
+  language: string
+  notifications: {
+    email: boolean
+    push: boolean
+    sms: boolean
+  }
+  privacy: {
+    profileVisible: boolean
+    progressVisible: boolean
+    achievementsVisible: boolean
+  }
+}
+
+export interface UserProgress {
+  userId: string
+  courseId: string
+  progress: number
+  completedChapters: string[]
+  lastAccessedAt: Date
+  startedAt: Date
+  completedAt?: Date
+}
+
+export type QuestionOption = string

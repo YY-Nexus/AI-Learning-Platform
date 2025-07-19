@@ -3,41 +3,25 @@ import type { Course } from "@/app/types"
 export const courseData: Course[] = [
   {
     id: "gpt-basics",
-    title: "GPT模型基础与应用",
-    description: "深入理解大语言模型的原理和实际应用，掌握GPT模型的核心概念和使用技巧",
+    title: "GPT基础应用课程",
+    description: "学习如何有效使用GPT进行日常工作",
     image: "/images/gpt-basics-course.png",
-    level: "beginner",
-    duration: "8小时",
-    progress: 75,
-    chapters: 12,
-    category: "AI基础",
-    instructor: "李教授",
-    rating: 4.8,
-    students: 1234,
-    studentsCount: 1234,
-    price: 299,
-    tags: ["GPT", "语言模型", "AI基础"],
-    isEnrolled: true,
-    difficulty: "beginner",
+    duration: "15小时",
+    level: "入门",
+    students: 2100,
+    category: "应用",
+    chapters: ["GPT模型介绍", "基础对话技巧", "文本生成应用", "工作效率提升", "常见问题解决"],
   },
   {
     id: "prompt-engineering",
-    title: "Prompt Engineering实战",
-    description: "掌握提示词工程的核心技巧和最佳实践，学会设计高效的AI交互方式",
+    title: "提示工程师专业课程",
+    description: "掌握AI提示工程的核心技能和最佳实践",
     image: "/images/prompt-engineering-course.png",
-    level: "intermediate",
-    duration: "12小时",
-    progress: 45,
-    chapters: 15,
-    category: "AI应用",
-    instructor: "王老师",
-    rating: 4.9,
-    students: 856,
-    studentsCount: 856,
-    price: 399,
-    tags: ["提示词", "AI交互", "实战"],
-    isEnrolled: true,
-    difficulty: "intermediate",
+    duration: "25小时",
+    level: "中级",
+    students: 890,
+    category: "专业",
+    chapters: ["提示工程基础理论", "高效提示设计技巧", "多模态提示应用", "提示优化与调试", "企业级提示管理"],
   },
   {
     id: "multimodal-ai",
@@ -191,6 +175,17 @@ export const courseData: Course[] = [
     isEnrolled: false,
     difficulty: "advanced",
   },
+  {
+    id: "ai-engineer",
+    title: "AI工程师入门课程",
+    description: "从零开始学习人工智能工程师必备技能",
+    image: "/images/ai-development-course.png",
+    duration: "40小时",
+    level: "初级",
+    students: 1250,
+    category: "工程",
+    chapters: ["人工智能基础概念", "机器学习算法入门", "深度学习框架使用", "AI项目实战演练", "模型部署与优化"],
+  },
 ]
 
 // 按分类获取课程
@@ -233,9 +228,9 @@ export const getCourseStats = () => {
   return {
     total: courseData.length,
     byLevel: {
-      beginner: courseData.filter((c) => c.level === "beginner").length,
-      intermediate: courseData.filter((c) => c.level === "intermediate").length,
-      advanced: courseData.filter((c) => c.level === "advanced").length,
+      初级: courseData.filter((c) => c.level === "初级").length,
+      中级: courseData.filter((c) => c.level === "中级").length,
+      高级: courseData.filter((c) => c.level === "高级").length,
     },
     byCategory: courseData.reduce(
       (acc, course) => {
@@ -247,6 +242,15 @@ export const getCourseStats = () => {
     averageRating: courseData.reduce((sum, course) => sum + course.rating, 0) / courseData.length,
     totalStudents: courseData.reduce((sum, course) => sum + (course.students || 0), 0),
   }
+}
+
+export async function getCourseById(id: string): Promise<Course | null> {
+  const course = courseData.find((c) => c.id === id)
+  return course || null
+}
+
+export async function getAllCourses(): Promise<Course[]> {
+  return courseData
 }
 
 export default courseData
