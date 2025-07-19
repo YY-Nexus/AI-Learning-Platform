@@ -1,9 +1,10 @@
+import type React from "react"
 // 用户相关类型
 export interface User {
   id: string
   name: string
   email: string
-  avatar?: string
+  avatar: string
   role: "student" | "teacher" | "admin"
   createdAt: Date
   updatedAt: Date
@@ -17,6 +18,10 @@ export interface User {
   lastActiveAt?: Date
   preferences?: UserPreferences
   stats?: UserStats
+  studyPoints: number
+  studyDays: number
+  completedCourses: number
+  studyHours: number
 }
 
 export interface UserPreferences {
@@ -72,8 +77,9 @@ export interface Course {
   students: number
   rating: number
   price: number
+  originalPrice?: number
   instructor: string
-  chapters: string[]
+  chapters: Chapter[]
   category: string
   tags: string[]
   createdAt: Date
@@ -81,6 +87,9 @@ export interface Course {
   isPublished?: boolean
   isFeatured?: boolean
   syllabus?: CourseSyllabus[]
+  features: string[]
+  requirements: string[]
+  learningOutcomes: string[]
 }
 
 export interface CourseSyllabus {
@@ -92,13 +101,21 @@ export interface CourseSyllabus {
   order: number
 }
 
+export interface Chapter {
+  id: string
+  title: string
+  duration: string
+  completed?: boolean
+  lessons: Lesson[]
+}
+
 export interface Lesson {
   id: string
   title: string
   description: string
   type: LessonType
   content: string
-  duration: number
+  duration: string
   resources: LessonResource[]
   quiz?: Quiz
   order: number
@@ -136,17 +153,18 @@ export interface Exam {
   id: string
   title: string
   description: string
+  image: string
   duration: number
-  questionCount: number
+  totalQuestions: number
+  passingScore: number
   difficulty: "easy" | "medium" | "hard"
   category: string
-  passingScore: number
-  questions: Question[]
+  tags: string[]
+  questions: ExamQuestion[]
   createdAt: Date
   updatedAt: Date
   isPublic?: boolean
   prerequisites?: string[]
-  tags?: string[]
 }
 
 export interface ExamAttempt {
@@ -171,14 +189,14 @@ export interface ExamAnswer {
   timeSpent: number
 }
 
-export interface Question {
+export interface ExamQuestion {
   id: string
-  text: string
-  type: QuestionType
-  options?: string[]
-  correctAnswer: string | number
-  explanation?: string
-  points: number
+  question: string
+  options: string[]
+  correctAnswer: number
+  explanation: string
+  difficulty: "easy" | "medium" | "hard"
+  category: string
 }
 
 export interface ExamResult {
@@ -303,6 +321,8 @@ export interface Achievement {
   points: number
   rarity: "common" | "rare" | "epic" | "legendary"
   unlockedAt?: Date
+  progress?: number
+  total?: number
 }
 
 export interface UserAchievement {
@@ -756,3 +776,50 @@ export interface UserProgress {
 }
 
 export type QuestionOption = string
+
+// Next.js 15 specific types
+export interface PageProps {
+  params: Promise<{ [key: string]: string | string[] | undefined }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export interface LayoutProps {
+  children: React.ReactNode
+  params: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+// Component Props
+export interface ResponsiveLayoutProps {
+  children: React.ReactNode
+  title?: string
+  user?: User
+  showHeader?: boolean
+  showFooter?: boolean
+}
+
+export interface ExamResultProps {
+  score: number
+  totalQuestions: number
+  correctAnswers: number
+  timeSpent: number
+  passingScore: number
+}
+
+export interface ProgressData {
+  coursesCompleted: number
+  totalCourses: number
+  studyHours: number
+  studyDays: number
+  currentStreak: number
+  longestStreak: number
+}
+
+export interface StudyGroup {
+  id: string
+  name: string
+  description: string
+  image: string
+  members: number
+  category: string
+  isJoined?: boolean
+}

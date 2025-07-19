@@ -6,9 +6,7 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ResponsiveLayout } from "@/components/responsive-layout"
-import { AccessibleButton } from "@/components/accessibility/accessible-button"
-import { LiveRegion } from "@/components/accessibility/live-region"
+import { Button } from "@/components/ui/button"
 import { Eye, Volume2, Keyboard, MousePointer } from "lucide-react"
 
 export default function AccessibilityPage() {
@@ -32,17 +30,18 @@ export default function AccessibilityPage() {
   }
 
   return (
-    <ResponsiveLayout
-      title="无障碍访问设置"
-      user={{ name: "张同学", avatar: "/placeholder.svg?height=40&width=40", level: "中级工程师" }}
-    >
-      <LiveRegion message={announcements} />
-
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-4xl mx-auto px-4">
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">无障碍访问设置</h1>
           <p className="text-gray-600">自定义您的学习体验，让系统更适合您的需求</p>
         </header>
+
+        {announcements && (
+          <div className="mb-4 p-3 bg-blue-100 text-blue-800 rounded-md" role="status" aria-live="polite">
+            {announcements}
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* 视觉设置 */}
@@ -269,14 +268,14 @@ export default function AccessibilityPage() {
         </div>
 
         <div className="mt-8 flex justify-center space-x-4">
-          <AccessibleButton
+          <Button
             size="lg"
             className="bg-blue-600 hover:bg-blue-700 text-white"
             onClick={() => setAnnouncements("设置已保存")}
           >
             保存设置
-          </AccessibleButton>
-          <AccessibleButton
+          </Button>
+          <Button
             variant="outline"
             size="lg"
             onClick={() => {
@@ -295,9 +294,9 @@ export default function AccessibilityPage() {
             }}
           >
             重置为默认
-          </AccessibleButton>
+          </Button>
         </div>
       </div>
-    </ResponsiveLayout>
+    </div>
   )
 }

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, BookOpen, Users, User, Trophy } from "lucide-react"
+import { Home, BookOpen, Trophy, User, Brain } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const navItems = [
@@ -17,13 +17,13 @@ const navItems = [
     icon: BookOpen,
   },
   {
-    name: "团队",
-    href: "/team",
-    icon: Users,
-  },
-  {
     name: "考试",
     href: "/exam",
+    icon: Brain,
+  },
+  {
+    name: "成就",
+    href: "/achievements",
     icon: Trophy,
   },
   {
@@ -37,11 +37,11 @@ export function BottomNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 md:hidden">
       <div className="grid grid-cols-5 h-16">
         {navItems.map((item) => {
+          const isActive = pathname === item.href
           const Icon = item.icon
-          const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))
 
           return (
             <Link
@@ -49,11 +49,11 @@ export function BottomNav() {
               href={item.href}
               className={cn(
                 "flex flex-col items-center justify-center space-y-1 text-xs transition-colors",
-                isActive ? "text-blue-600" : "text-gray-600 hover:text-gray-900",
+                isActive ? "text-blue-600 bg-blue-50" : "text-gray-600 hover:text-blue-600",
               )}
             >
-              <Icon className={cn("h-5 w-5", isActive && "text-blue-600")} />
-              <span className={cn("text-xs", isActive && "text-blue-600 font-medium")}>{item.name}</span>
+              <Icon className="h-5 w-5" />
+              <span className="font-medium">{item.name}</span>
             </Link>
           )
         })}

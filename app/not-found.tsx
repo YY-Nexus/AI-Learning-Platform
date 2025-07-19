@@ -10,34 +10,35 @@ export default function NotFound() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-md text-center">
         <CardHeader className="pb-4">
-          <div className="mx-auto w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-            <span className="text-4xl font-bold text-blue-600">404</span>
-          </div>
+          <div className="mx-auto mb-4 text-6xl">🤖</div>
           <CardTitle className="text-2xl font-bold text-gray-900">页面未找到</CardTitle>
           <CardDescription className="text-gray-600">抱歉，您访问的页面不存在或已被移动</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div className="text-sm text-gray-500 mb-6">错误代码：404</div>
+
           <div className="space-y-3">
             <Button asChild className="w-full">
               <Link href="/">
-                <Home className="w-4 h-4 mr-2" />
+                <Home className="mr-2 h-4 w-4" />
                 返回首页
               </Link>
             </Button>
+
             <Button variant="outline" asChild className="w-full bg-transparent">
               <Link href="/courses">
-                <Search className="w-4 h-4 mr-2" />
+                <Search className="mr-2 h-4 w-4" />
                 浏览课程
               </Link>
             </Button>
+
             <Button variant="ghost" onClick={() => window.history.back()} className="w-full">
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               返回上页
             </Button>
           </div>
-          <div className="pt-4 border-t">
-            <p className="text-sm text-gray-500">如果您认为这是一个错误，请联系我们的技术支持</p>
-          </div>
+
+          <div className="mt-6 text-xs text-gray-400">如果问题持续存在，请联系技术支持</div>
         </CardContent>
       </Card>
     </div>
