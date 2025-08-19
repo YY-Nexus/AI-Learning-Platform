@@ -1,7 +1,4 @@
-"use client"
-
-import Image from "next/image"
-import { useState } from "react"
+import type React from "react"
 
 interface CourseImageProps {
   src: string
@@ -9,17 +6,23 @@ interface CourseImageProps {
   title: string
   color: string
   className?: string
-  width?: number
-  height?: number
 }
 
-export function CourseImage({ src, alt, title, color, className = "", width = 400, height = 300 }: CourseImageProps) {
-  const [error, setError] = useState(false)
-  const [loading, setLoading] = useState(true)
-
-  const handleImageError = () => {
-    setError(true)
-    setLoading(false)
+export function CourseImage({ src, alt, title, color, className = "" }: CourseImageProps) {
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    const target = e.target as HTMLImageElement
+    target.style.display = "none"
+    const parent = target.parentElement
+    if (parent) {
+      parent.innerHTML = `
+        <div class="w-full h-48 bg-gradient-to-r ${color} flex items-center justify-center">
+          <div class="text-white text-center p-4">
+            <div class="text-2xl font-bold mb-2">${title.split(" ")[0]}</div>
+            <div class="text-sm opacity-90">${title}</div>
+          </div>
+        </div>
+      `
+    }
   }
 
   // DeepSeek专用高级SVG设计
@@ -273,41 +276,13 @@ export function CourseImage({ src, alt, title, color, className = "", width = 40
     )
   }
 
-  if (error) {
-    return (
-      <div className={`bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center ${className}`}>
-        <div className="text-center text-white">
-          <div className="w-16 h-16 mx-auto mb-4 bg-white/20 rounded-full flex items-center justify-center">
-            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </div>
-          <p className="text-sm font-medium">{alt}</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className={`relative overflow-hidden ${className}`}>
-      {loading && (
-        <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
-          <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-        </div>
-      )}
-      <Image
+      <img
         src={src || "/placeholder.svg"}
         alt={alt}
-        width={width}
-        height={height}
-        className={`transition-opacity duration-300 ${loading ? "opacity-0" : "opacity-100"}`}
-        onLoad={() => setLoading(false)}
+        className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
         onError={handleImageError}
-        priority
       />
     </div>
   )

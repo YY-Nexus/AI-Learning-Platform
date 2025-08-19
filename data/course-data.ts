@@ -1,256 +1,351 @@
-import type { Course } from "@/app/types"
+export interface Course {
+  id: number
+  title: string
+  description: string
+  instructor: string
+  duration: string
+  students: number
+  rating: number
+  level: string
+  category: string
+  progress: number
+  chapters: number
+  price: string
+  image: string
+  tags: string[]
+  color: string
+  isNew?: boolean
+  isFeatured?: boolean
+  highlights: string[]
+  objectives?: string[]
+  prerequisites?: string[]
+  syllabus?: {
+    title: string
+    lessons: {
+      title: string
+      duration: string
+    }[]
+  }[]
+}
 
 export const courseData: Course[] = [
   {
-    id: "gpt-basics",
-    title: "GPT基础应用课程",
-    description: "学习如何有效使用GPT进行日常工作",
+    id: 1,
+    title: "GPT模型基础与应用",
+    description: "从零开始学习大语言模型的基本原理，掌握GPT系列模型的核心概念和实际应用场景",
+    instructor: "李教授",
+    duration: "8小时",
+    students: 1234,
+    rating: 4.8,
+    level: "初级",
+    category: "基础理论",
+    progress: 75,
+    chapters: 12,
+    price: "免费",
     image: "/images/gpt-basics-course.png",
-    duration: "15小时",
-    level: "入门",
-    students: 2100,
-    category: "应用",
-    chapters: ["GPT模型介绍", "基础对话技巧", "文本生成应用", "工作效率提升", "常见问题解决"],
+    tags: ["GPT", "基础", "理论"],
+    color: "from-green-500 to-emerald-600",
+    highlights: ["了解大语言模型的发展历程", "掌握GPT模型的基本原理", "学习常见应用场景和最佳实践"],
+    objectives: [
+      "理解Transformer架构的基本原理",
+      "掌握GPT模型的核心机制",
+      "能够应用GPT模型解决实际问题",
+      "了解大语言模型的局限性和未来发展方向",
+    ],
+    prerequisites: ["基础的机器学习知识", "Python编程基础"],
+    syllabus: [
+      {
+        title: "第一章：大语言模型简介",
+        lessons: [
+          { title: "1.1 人工智能与大语言模型", duration: "30分钟" },
+          { title: "1.2 GPT模型的发展历程", duration: "45分钟" },
+          { title: "1.3 大语言模型的应用场景", duration: "40分钟" },
+        ],
+      },
+      {
+        title: "第二章：GPT模型原理",
+        lessons: [
+          { title: "2.1 Transformer架构详解", duration: "60分钟" },
+          { title: "2.2 自注意力机制", duration: "50分钟" },
+          { title: "2.3 预训练与微调", duration: "55分钟" },
+        ],
+      },
+    ],
   },
   {
-    id: "prompt-engineering",
-    title: "提示工程师专业课程",
-    description: "掌握AI提示工程的核心技能和最佳实践",
-    image: "/images/prompt-engineering-course.png",
-    duration: "25小时",
+    id: 2,
+    title: "Prompt Engineering实战指南",
+    description: "深入学习提示词工程的核心技巧，掌握如何设计高效的提示词来优化AI模型输出",
+    instructor: "王工程师",
+    duration: "12小时",
+    students: 856,
+    rating: 4.9,
     level: "中级",
-    students: 890,
-    category: "专业",
-    chapters: ["提示工程基础理论", "高效提示设计技巧", "多模态提示应用", "提示优化与调试", "企业级提示管理"],
+    category: "Prompt工程",
+    progress: 45,
+    chapters: 15,
+    price: "免费",
+    image: "/images/prompt-engineering-course.png",
+    tags: ["Prompt", "实战", "优化"],
+    color: "from-blue-500 to-indigo-600",
+    isNew: true,
+    highlights: ["掌握提示词设计的核心原则", "学习高级提示词技巧和模式", "实战演练各类应用场景"],
   },
   {
-    id: "multimodal-ai",
-    title: "多模态AI应用开发",
-    description: "深入了解图像、文本、音频等多模态AI技术的实际应用和开发方法",
-    image: "/images/multimodal-ai-course.png",
-    level: "advanced",
+    id: 3,
+    title: "AI应用开发框架详解",
+    description: "学习主流AI应用开发框架，包括LangChain、LlamaIndex等工具的使用和最佳实践",
+    instructor: "张架构师",
     duration: "16小时",
-    progress: 0,
-    chapters: 20,
-    category: "AI开发",
-    instructor: "张博士",
-    rating: 4.7,
     students: 642,
-    studentsCount: 642,
-    price: 599,
-    tags: ["多模态", "计算机视觉", "深度学习"],
-    isEnrolled: false,
-    difficulty: "advanced",
+    rating: 4.7,
+    level: "高级",
+    category: "开发实战",
+    progress: 20,
+    chapters: 18,
+    price: "免费",
+    image: "/images/ai-development-course.png",
+    tags: ["框架", "开发", "LangChain"],
+    color: "from-purple-500 to-violet-600",
+    highlights: ["掌握LangChain框架的核心组件", "学习LlamaIndex的索引和查询机制", "构建完整的AI应用系统"],
   },
   {
-    id: "ai-ethics",
-    title: "AI伦理与安全",
-    description: "探讨人工智能的伦理问题，学习负责任的AI开发实践和安全防护措施",
-    image: "/images/ai-ethics-course.png",
-    level: "intermediate",
+    id: 4,
+    title: "多模态AI模型应用",
+    description: "探索文本、图像、音频等多模态AI模型的应用，学习如何构建综合性AI解决方案",
+    instructor: "陈博士",
+    duration: "10小时",
+    students: 423,
+    rating: 4.6,
+    level: "中级",
+    category: "模型应用",
+    progress: 0,
+    chapters: 14,
+    price: "免费",
+    image: "/images/multimodal-ai-course.png",
+    tags: ["多模态", "图像", "音频"],
+    color: "from-orange-500 to-amber-600",
+    highlights: ["了解多模态AI的基本原理", "掌握文本与图像结合的应用开发", "学习音频处理与分析技术"],
+  },
+  {
+    id: 5,
+    title: "AI伦理与安全实践",
+    description: "了解AI开发中的伦理考量和安全实践，学习如何构建负责任的AI应用",
+    instructor: "刘专家",
     duration: "6小时",
+    students: 789,
+    rating: 4.5,
+    level: "初级",
+    category: "高级进阶",
     progress: 0,
     chapters: 8,
-    category: "AI伦理",
-    instructor: "陈教授",
-    rating: 4.6,
-    students: 423,
-    studentsCount: 423,
-    price: 199,
-    tags: ["AI伦理", "安全", "负责任AI"],
-    isEnrolled: false,
-    difficulty: "intermediate",
+    price: "免费",
+    image: "/images/ai-ethics-course.png",
+    tags: ["伦理", "安全", "实践"],
+    color: "from-teal-500 to-cyan-600",
+    highlights: ["理解AI伦理的核心原则", "学习隐私保护和数据安全", "掌握负责任的AI开发方法"],
   },
   {
-    id: "ai-development",
-    title: "AI应用开发实战",
-    description: "通过实际项目学习AI应用开发，掌握从概念到部署的完整开发流程",
-    image: "/images/ai-development-course.png",
-    level: "advanced",
+    id: 6,
+    title: "企业级AI解决方案设计",
+    description: "学习如何为企业设计和实施AI解决方案，包括需求分析、架构设计和部署策略",
+    instructor: "赵总监",
     duration: "20小时",
-    progress: 0,
-    chapters: 25,
-    category: "AI开发",
-    instructor: "刘工程师",
+    students: 312,
     rating: 4.9,
-    students: 789,
-    studentsCount: 789,
-    price: 799,
-    tags: ["应用开发", "项目实战", "部署"],
-    isEnrolled: false,
-    difficulty: "advanced",
-  },
-  {
-    id: "ai-certification",
-    title: "AI工程师认证课程",
-    description: "全面的AI工程师认证培训，涵盖理论基础和实践技能的综合课程",
-    image: "/images/ai-certification-course.png",
-    level: "advanced",
-    duration: "40小时",
-    progress: 0,
-    chapters: 50,
-    category: "认证课程",
-    instructor: "专家团队",
-    rating: 4.8,
-    students: 1567,
-    studentsCount: 1567,
-    price: 1299,
-    tags: ["认证", "综合课程", "专业技能"],
-    isEnrolled: false,
-    difficulty: "advanced",
-  },
-  {
-    id: "medical-ai",
-    title: "医疗AI应用",
-    description: "探索人工智能在医疗健康领域的应用，学习医疗AI的开发和部署",
-    image: "/images/medical-ai-course.png",
-    level: "advanced",
-    duration: "14小时",
-    progress: 0,
-    chapters: 18,
-    category: "行业应用",
-    instructor: "医疗AI专家",
-    rating: 4.7,
-    students: 345,
-    studentsCount: 345,
-    price: 699,
-    tags: ["医疗AI", "健康科技", "行业应用"],
-    isEnrolled: false,
-    difficulty: "advanced",
-  },
-  {
-    id: "fintech-ai",
-    title: "金融科技AI",
-    description: "学习AI在金融科技领域的应用，包括风控、投资分析等核心场景",
-    image: "/images/fintech-ai-course.png",
-    level: "advanced",
-    duration: "12小时",
-    progress: 0,
-    chapters: 16,
-    category: "行业应用",
-    instructor: "金融科技专家",
-    rating: 4.6,
-    students: 567,
-    studentsCount: 567,
-    price: 599,
-    tags: ["金融科技", "风控", "投资分析"],
-    isEnrolled: false,
-    difficulty: "advanced",
-  },
-  {
-    id: "no-code-ai",
-    title: "无代码AI应用构建",
-    description: "学习使用无代码平台快速构建AI应用，适合非技术背景的学习者",
-    image: "/images/no-code-ai-course.png",
-    level: "beginner",
-    duration: "8小时",
-    progress: 0,
-    chapters: 12,
-    category: "无代码开发",
-    instructor: "产品专家",
-    rating: 4.5,
-    students: 892,
-    studentsCount: 892,
-    price: 299,
-    tags: ["无代码", "快速开发", "产品设计"],
-    isEnrolled: false,
-    difficulty: "beginner",
-  },
-  {
-    id: "model-tuning",
-    title: "AI模型微调技术",
-    description: "深入学习AI模型的微调技术，掌握模型优化和定制化开发方法",
-    image: "/images/model-tuning-course.png",
-    level: "advanced",
-    duration: "18小时",
+    level: "高级",
+    category: "高级进阶",
     progress: 0,
     chapters: 22,
-    category: "模型优化",
-    instructor: "算法专家",
-    rating: 4.8,
-    students: 234,
-    studentsCount: 234,
-    price: 899,
-    tags: ["模型微调", "算法优化", "深度学习"],
-    isEnrolled: false,
-    difficulty: "advanced",
+    price: "免费",
+    image: "/images/enterprise-ai-course.png",
+    tags: ["企业级", "解决方案", "架构"],
+    color: "from-red-500 to-rose-600",
+    highlights: ["掌握企业AI需求分析方法", "学习大规模AI系统架构设计", "了解AI项目管理和实施策略"],
   },
   {
-    id: "ai-engineer",
-    title: "AI工程师入门课程",
-    description: "从零开始学习人工智能工程师必备技能",
-    image: "/images/ai-development-course.png",
-    duration: "40小时",
-    level: "初级",
-    students: 1250,
-    category: "工程",
-    chapters: ["人工智能基础概念", "机器学习算法入门", "深度学习框架使用", "AI项目实战演练", "模型部署与优化"],
+    id: 7,
+    title: "生成式人工智能应用工程师（高级认证）",
+    description: "基于百度智能云课程体系的专业AI工程师认证培训，涵盖提示词工程、数据安全、团队管理等核心技能",
+    instructor: "百度智能云",
+    duration: "30小时",
+    students: 2156,
+    rating: 4.9,
+    level: "高级",
+    category: "认证课程",
+    progress: 0,
+    chapters: 9,
+    price: "免费",
+    image: "/images/ai-certification-course.png",
+    tags: ["认证", "提示词工程", "企业级"],
+    color: "from-pink-500 to-fuchsia-600",
+    isFeatured: true,
+    highlights: ["获得官方认证证书", "掌握企业级AI应用开发", "提升职场竞争力"],
+  },
+  {
+    id: 8,
+    title: "医疗行业AI应用实践",
+    description: "探索AI在医疗领域的创新应用，学习医疗数据处理、诊断辅助和健康管理系统开发",
+    instructor: "郑医生",
+    duration: "15小时",
+    students: 378,
+    rating: 4.8,
+    level: "高级",
+    category: "行业应用",
+    progress: 0,
+    chapters: 16,
+    price: "免费",
+    image: "/images/medical-ai-course.png",
+    tags: ["医疗", "健康", "诊断"],
+    color: "from-emerald-500 to-green-600",
+    isNew: true,
+    highlights: ["了解医疗数据处理特点", "学习医疗AI模型开发", "掌握医疗AI伦理与合规"],
+  },
+  {
+    id: 9,
+    title: "金融科技与AI应用",
+    description: "学习AI在金融领域的应用，包括风险评估、智能投顾、反欺诈系统等实用案例",
+    instructor: "吴分析师",
+    duration: "18小时",
+    students: 521,
+    rating: 4.7,
+    level: "中级",
+    category: "行业应用",
+    progress: 0,
+    chapters: 20,
+    price: "免费",
+    image: "/images/fintech-ai-course.png",
+    tags: ["金融", "风控", "投资"],
+    color: "from-yellow-500 to-amber-600",
+    highlights: ["掌握金融数据分析方法", "学习智能投顾系统开发", "了解金融风控AI应用"],
+  },
+  {
+    id: 10,
+    title: "零代码AI应用构建实战",
+    description: "无需编程基础，学习使用现代化工具快速构建AI应用，适合产品经理、运营人员和初学者",
+    instructor: "林讲师",
+    duration: "8小时",
+    students: 1567,
+    rating: 4.8,
+    level: "入门",
+    category: "开发实战",
+    progress: 0,
+    chapters: 10,
+    price: "免费",
+    image: "/images/no-code-ai-course.png",
+    tags: ["零代码", "快速开发", "工具"],
+    color: "from-blue-400 to-cyan-500",
+    highlights: ["掌握主流零代码平台使用", "学习AI功能快速集成", "构建实用的AI应用"],
+  },
+  {
+    id: 11,
+    title: "大模型微调与定制化",
+    description: "深入学习如何对大型语言模型进行微调和定制，以适应特定领域和任务需求",
+    instructor: "黄研究员",
+    duration: "25小时",
+    students: 342,
+    rating: 4.9,
+    level: "专家",
+    category: "高级进阶",
+    progress: 0,
+    chapters: 18,
+    price: "免费",
+    image: "/images/model-tuning-course.png",
+    tags: ["微调", "定制化", "领域适应"],
+    color: "from-violet-500 to-purple-600",
+    highlights: ["掌握模型微调核心技术", "学习参数高效微调方法", "实现领域专用模型开发"],
+  },
+  {
+    id: 12,
+    title: "AI产品经理实战课程",
+    description: "专为产品经理设计的AI课程，学习如何规划、设计和管理AI产品，提升产品竞争力",
+    instructor: "周产品总监",
+    duration: "16小时",
+    students: 876,
+    rating: 4.7,
+    level: "中级",
+    category: "高级进阶",
+    progress: 0,
+    chapters: 14,
+    price: "免费",
+    image: "/images/ai-product-course.png",
+    tags: ["产品经理", "需求分析", "用户体验"],
+    color: "from-sky-500 to-blue-600",
+    isNew: true,
+    highlights: ["掌握AI产品规划方法", "学习用户需求分析", "了解AI产品迭代策略"],
+  },
+  {
+    id: 13,
+    title: "计算机视觉与深度学习",
+    description: "系统学习计算机视觉技术和深度学习模型，掌握图像识别、目标检测等核心算法",
+    instructor: "田教授",
+    duration: "30小时",
+    students: 754,
+    rating: 4.8,
+    level: "高级",
+    category: "基础理论",
+    progress: 0,
+    chapters: 24,
+    price: "免费",
+    image: "/images/computer-vision-course.png",
+    tags: ["视觉", "深度学习", "图像处理"],
+    color: "from-indigo-500 to-blue-600",
+    highlights: ["掌握卷积神经网络原理", "学习目标检测算法", "实现图像分割应用"],
+  },
+  {
+    id: 14,
+    title: "自然语言处理入门到精通",
+    description: "全面学习NLP技术，从基础概念到高级应用，掌握文本分析、情感分析等实用技能",
+    instructor: "孙博士",
+    duration: "28小时",
+    students: 932,
+    rating: 4.9,
+    level: "中级",
+    category: "基础理论",
+    progress: 0,
+    chapters: 22,
+    price: "免费",
+    image: "/images/nlp-course.png",
+    tags: ["NLP", "文本分析", "语义理解"],
+    color: "from-green-500 to-teal-600",
+    highlights: ["掌握文本预处理技术", "学习词向量和语言模型", "实现情感分析应用"],
+  },
+  {
+    id: 15,
+    title: "AI创业实战指南",
+    description: "为创业者和创新团队提供的AI创业课程，涵盖市场分析、产品定位、融资策略等关键内容",
+    instructor: "杨创始人",
+    duration: "12小时",
+    students: 456,
+    rating: 4.7,
+    level: "中级",
+    category: "高级进阶",
+    progress: 0,
+    chapters: 10,
+    price: "免费",
+    image: "/images/ai-startup-course.png",
+    tags: ["创业", "商业模式", "融资"],
+    color: "from-orange-500 to-red-600",
+    highlights: ["了解AI创业市场趋势", "学习产品定位和差异化", "掌握融资路径和策略"],
+  },
+  {
+    id: 16,
+    title: "DeepSeek大模型应用开发",
+    description: "基于DeepSeek大模型的应用开发课程，学习如何利用先进的AI模型构建创新应用",
+    instructor: "DeepSeek团队",
+    duration: "20小时",
+    students: 1245,
+    rating: 4.9,
+    level: "中级",
+    category: "模型应用",
+    progress: 0,
+    chapters: 16,
+    price: "免费",
+    image: "/placeholder.svg?height=192&width=384&text=DeepSeek大模型应用开发",
+    tags: ["DeepSeek", "大模型", "应用开发"],
+    color: "from-blue-500 to-purple-600",
+    isNew: true,
+    isFeatured: true,
+    highlights: ["掌握DeepSeek API使用", "学习大模型应用架构", "实现多场景应用开发"],
   },
 ]
-
-// 按分类获取课程
-export const getCoursesByCategory = (category: string): Course[] => {
-  return courseData.filter((course) => course.category === category)
-}
-
-// 按难度获取课程
-export const getCoursesByLevel = (level: string): Course[] => {
-  return courseData.filter((course) => course.level === level)
-}
-
-// 获取推荐课程
-export const getRecommendedCourses = (limit = 5): Course[] => {
-  return courseData
-    .filter((course) => course.rating >= 4.5)
-    .sort((a, b) => b.rating - a.rating)
-    .slice(0, limit)
-}
-
-// 获取用户已报名课程
-export const getEnrolledCourses = (): Course[] => {
-  return courseData.filter((course) => course.isEnrolled)
-}
-
-// 搜索课程
-export const searchCourses = (query: string): Course[] => {
-  const searchTerm = query.toLowerCase()
-  return courseData.filter(
-    (course) =>
-      course.title.toLowerCase().includes(searchTerm) ||
-      course.description.toLowerCase().includes(searchTerm) ||
-      course.tags?.some((tag) => tag.toLowerCase().includes(searchTerm)) ||
-      course.instructor.toLowerCase().includes(searchTerm),
-  )
-}
-
-// 获取课程统计信息
-export const getCourseStats = () => {
-  return {
-    total: courseData.length,
-    byLevel: {
-      初级: courseData.filter((c) => c.level === "初级").length,
-      中级: courseData.filter((c) => c.level === "中级").length,
-      高级: courseData.filter((c) => c.level === "高级").length,
-    },
-    byCategory: courseData.reduce(
-      (acc, course) => {
-        acc[course.category] = (acc[course.category] || 0) + 1
-        return acc
-      },
-      {} as Record<string, number>,
-    ),
-    averageRating: courseData.reduce((sum, course) => sum + course.rating, 0) / courseData.length,
-    totalStudents: courseData.reduce((sum, course) => sum + (course.students || 0), 0),
-  }
-}
-
-export async function getCourseById(id: string): Promise<Course | null> {
-  const course = courseData.find((c) => c.id === id)
-  return course || null
-}
-
-export async function getAllCourses(): Promise<Course[]> {
-  return courseData
-}
-
-export default courseData

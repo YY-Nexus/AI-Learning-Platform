@@ -1,65 +1,59 @@
-"use client"
-
 import Image from "next/image"
-import Link from "next/link"
-import { Bell, Search, Menu } from "lucide-react"
-import { Button } from "@/components/ui/button"
 
 interface BrandHeaderProps {
-  title?: string
-  showSearch?: boolean
-  showNotifications?: boolean
-  showMenu?: boolean
+  showSubtitle?: boolean
+  size?: "sm" | "md" | "lg"
+  className?: string
 }
 
-export function BrandHeader({
-  title = "YanYu Smart Cloud³",
-  showSearch = true,
-  showNotifications = true,
-  showMenu = false,
-}: BrandHeaderProps) {
-  return (
-    <header className="sticky top-0 z-40 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-      <div className="container flex h-16 items-center justify-between px-4">
-        <div className="flex items-center space-x-4">
-          {showMenu && (
-            <Button variant="ghost" size="sm" className="md:hidden">
-              <Menu className="h-5 w-5" />
-            </Button>
-          )}
-          <Link href="/" className="flex items-center space-x-2">
-            <Image
-              src="/images/yanyu-logo.png"
-              alt="YanYu Smart Cloud³"
-              width={32}
-              height={32}
-              className="rounded-lg"
-            />
-            <div className="hidden sm:block">
-              <h1 className="text-lg font-bold text-gray-900">{title}</h1>
-              <p className="text-xs text-gray-500">万象归元于云枢，深栈智启新纪元</p>
-            </div>
-          </Link>
-        </div>
+export function BrandHeader({ showSubtitle = true, size = "md", className = "" }: BrandHeaderProps) {
+  const logoSizes = {
+    sm: "h-8 w-8",
+    md: "h-10 w-10",
+    lg: "h-16 w-16",
+  }
 
-        <div className="flex items-center space-x-2">
-          {showSearch && (
-            <Button variant="ghost" size="sm">
-              <Search className="h-5 w-5" />
-              <span className="sr-only">搜索</span>
-            </Button>
-          )}
-          {showNotifications && (
-            <Button variant="ghost" size="sm" className="relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full"></span>
-              <span className="sr-only">通知</span>
-            </Button>
-          )}
+  const titleSizes = {
+    sm: "text-sm",
+    md: "text-lg",
+    lg: "text-2xl",
+  }
+
+  const subtitleSizes = {
+    sm: "text-xs",
+    md: "text-sm",
+    lg: "text-base",
+  }
+
+  return (
+    <div className={`flex flex-col items-center space-y-2 ${className}`}>
+      <div className="flex items-center space-x-3">
+        <div className="relative">
+          <Image
+            src="/images/yanyu-logo.png"
+            alt="YanYu Smart Cloud³ Logo"
+            width={size === "lg" ? 64 : size === "md" ? 40 : 32}
+            height={size === "lg" ? 64 : size === "md" ? 40 : 32}
+            className={`${logoSizes[size]} object-contain`}
+            priority
+          />
+        </div>
+        <div className="flex flex-col">
+          {/* 单行显示应用名称，调整字体大小 */}
+          <h1
+            className={`font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent whitespace-nowrap ${titleSizes[size]}`}
+          >
+            YanYu Smart Cloud³ Learning Platform
+          </h1>
         </div>
       </div>
-    </header>
+
+      {showSubtitle && (
+        <div className="text-center space-y-1">
+          <p className={`text-gray-700 font-medium ${subtitleSizes[size]}`}>言枢象限·语启未来</p>
+          <p className={`text-gray-500 italic ${subtitleSizes[size]}`}>YanShu Quadrant · YuQi Future</p>
+        </div>
+      )}
+    </div>
   )
 }
-
-export default BrandHeader

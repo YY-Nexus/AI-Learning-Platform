@@ -1,562 +1,584 @@
-import { notFound } from "next/navigation"
-import Image from "next/image"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+"use client"
+
+import { useState } from "react"
+import { useParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { BrandHeader } from "@/components/brand-header"
+import { Card, CardContent } from "@/components/ui/card"
+import { Progress } from "@/components/ui/progress"
 import {
-  Play,
+  BookOpen,
   Clock,
   Users,
   Star,
-  BookOpen,
+  Play,
   CheckCircle,
+  FileText,
+  MessageSquare,
+  Award,
   Download,
   Share2,
   Heart,
-  MessageCircle,
-  User,
-  Target,
-  Zap,
+  ChevronDown,
+  ChevronUp,
+  ArrowLeft,
 } from "lucide-react"
+import Link from "next/link"
+import { courseData } from "@/data/course-data"
 
-// 模拟课程数据
-const courseData = {
-  "ai-basics": {
-    id: "ai-basics",
-    title: "AI基础入门：从零开始学人工智能",
-    description: "全面系统地学习人工智能基础知识，包括机器学习、深度学习、神经网络等核心概念，适合零基础学员",
-    image: "/images/ai-basics-course.png",
-    instructor: "张教授",
-    instructorAvatar: "/placeholder.svg?height=40&width=40",
-    duration: "12小时",
-    level: "beginner" as const,
-    students: 15420,
-    rating: 4.8,
-    reviewCount: 2341,
-    price: 299,
-    originalPrice: 599,
-    category: "人工智能",
-    tags: ["AI基础", "机器学习", "深度学习", "入门课程"],
-    features: ["12小时高质量视频内容", "50+实战练习题", "完整项目案例", "专业讲师答疑", "学习证书认证", "终身免费更新"],
-    requirements: ["具备基本的数学知识（高中水平）", "了解基础的编程概念", "有学习新技术的热情", "准备好投入时间学习"],
-    learningOutcomes: [
-      "理解人工智能的基本概念和发展历程",
-      "掌握机器学习的核心算法和应用",
-      "了解深度学习和神经网络原理",
-      "能够识别和分析AI在各行业的应用",
-      "具备进一步学习高级AI技术的基础",
-    ],
-    chapters: [
-      {
-        id: "1",
-        title: "人工智能概述",
-        duration: "45分钟",
-        lessons: [
-          { id: "1-1", title: "什么是人工智能", duration: "15分钟", completed: true },
-          { id: "1-2", title: "AI发展历程", duration: "20分钟", completed: true },
-          { id: "1-3", title: "AI的分类和应用", duration: "10分钟", completed: false },
-        ],
-      },
-      {
-        id: "2",
-        title: "机器学习基础",
-        duration: "2小时30分钟",
-        lessons: [
-          { id: "2-1", title: "机器学习概念", duration: "30分钟", completed: false },
-          { id: "2-2", title: "监督学习", duration: "45分钟", completed: false },
-          { id: "2-3", title: "无监督学习", duration: "45分钟", completed: false },
-          { id: "2-4", title: "强化学习", duration: "30分钟", completed: false },
-        ],
-      },
-      {
-        id: "3",
-        title: "深度学习入门",
-        duration: "3小时15分钟",
-        lessons: [
-          { id: "3-1", title: "神经网络基础", duration: "60分钟", completed: false },
-          { id: "3-2", title: "深度神经网络", duration: "45分钟", completed: false },
-          { id: "3-3", title: "卷积神经网络", duration: "45分钟", completed: false },
-          { id: "3-4", title: "循环神经网络", duration: "45分钟", completed: false },
-        ],
-      },
-      {
-        id: "4",
-        title: "实战项目",
-        duration: "2小时",
-        lessons: [
-          { id: "4-1", title: "图像识别项目", duration: "60分钟", completed: false },
-          { id: "4-2", title: "文本分析项目", duration: "60分钟", completed: false },
-        ],
-      },
-    ],
-    reviews: [
-      {
-        id: "1",
-        user: "李同学",
-        avatar: "/placeholder.svg?height=32&width=32",
-        rating: 5,
-        date: "2024-01-15",
-        content: "课程内容非常全面，讲解清晰易懂，特别适合初学者。老师的教学方式很棒，推荐！",
-      },
-      {
-        id: "2",
-        user: "王工程师",
-        avatar: "/placeholder.svg?height=32&width=32",
-        rating: 5,
-        date: "2024-01-10",
-        content: "作为转行学AI的人，这门课程给了我很好的基础。实战项目很有价值。",
-      },
-      {
-        id: "3",
-        user: "陈学生",
-        avatar: "/placeholder.svg?height=32&width=32",
-        rating: 4,
-        date: "2024-01-08",
-        content: "内容丰富，但建议增加更多的练习题。总体来说是一门很好的入门课程。",
-      },
-    ],
-  },
-  "prompt-engineering": {
-    id: "prompt-engineering",
-    title: "提示工程实战：掌握AI对话的艺术",
-    description: "深入学习大语言模型的提示工程技术，掌握与AI高效对话的方法和技巧",
-    image: "/images/prompt-engineering-course.png",
-    instructor: "刘博士",
-    instructorAvatar: "/placeholder.svg?height=40&width=40",
-    duration: "8小时",
-    level: "intermediate" as const,
-    students: 8750,
-    rating: 4.9,
-    reviewCount: 1456,
-    price: 399,
-    originalPrice: 799,
-    category: "提示工程",
-    tags: ["提示工程", "大语言模型", "GPT", "实战应用"],
-    features: ["8小时专业视频教学", "100+提示模板", "实际案例分析", "行业应用指导", "专家在线答疑", "持续内容更新"],
-    requirements: ["了解基本的AI概念", "有使用ChatGPT等工具的经验", "具备逻辑思维能力", "对AI应用有浓厚兴趣"],
-    learningOutcomes: [
-      "掌握提示工程的核心原理和方法",
-      "能够设计高效的提示模板",
-      "了解不同场景下的提示策略",
-      "具备优化AI输出质量的能力",
-      "能够将提示工程应用到实际工作中",
-    ],
-    chapters: [
-      {
-        id: "1",
-        title: "提示工程基础",
-        duration: "1小时30分钟",
-        lessons: [
-          { id: "1-1", title: "什么是提示工程", duration: "20分钟", completed: false },
-          { id: "1-2", title: "提示的基本结构", duration: "25分钟", completed: false },
-          { id: "1-3", title: "常见提示类型", duration: "25分钟", completed: false },
-          { id: "1-4", title: "提示设计原则", duration: "20分钟", completed: false },
-        ],
-      },
-      {
-        id: "2",
-        title: "高级提示技术",
-        duration: "2小时45分钟",
-        lessons: [
-          { id: "2-1", title: "Chain-of-Thought", duration: "45分钟", completed: false },
-          { id: "2-2", title: "Few-shot Learning", duration: "40分钟", completed: false },
-          { id: "2-3", title: "Role Playing", duration: "35分钟", completed: false },
-          { id: "2-4", title: "提示链接技术", duration: "45分钟", completed: false },
-        ],
-      },
-      {
-        id: "3",
-        title: "行业应用实战",
-        duration: "3小时45分钟",
-        lessons: [
-          { id: "3-1", title: "内容创作应用", duration: "60分钟", completed: false },
-          { id: "3-2", title: "数据分析应用", duration: "55分钟", completed: false },
-          { id: "3-3", title: "客服自动化", duration: "50分钟", completed: false },
-          { id: "3-4", title: "教育培训应用", duration: "40分钟", completed: false },
-        ],
-      },
-    ],
-    reviews: [
-      {
-        id: "1",
-        user: "产品经理小张",
-        avatar: "/placeholder.svg?height=32&width=32",
-        rating: 5,
-        date: "2024-01-20",
-        content: "这门课程完全改变了我使用AI的方式，工作效率提升了300%！",
-      },
-      {
-        id: "2",
-        user: "创业者老王",
-        avatar: "/placeholder.svg?height=32&width=32",
-        rating: 5,
-        date: "2024-01-18",
-        content: "提示工程真的是一门艺术，这个课程教会了我很多实用技巧。",
-      },
-    ],
-  },
-}
+export default function CourseDetailPage() {
+  const params = useParams()
+  const courseId = Number(params.id)
+  const course = courseData.find((c) => c.id === courseId)
 
-interface PageProps {
-  params: Promise<{ id: string }>
-}
-
-export default async function CourseDetailPage({ params }: PageProps) {
-  const { id } = await params
-  const course = courseData[id as keyof typeof courseData]
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
 
   if (!course) {
-    notFound()
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">课程未找到</h1>
+          <p className="text-gray-600 mb-6">抱歉，您请求的课程不存在或已被移除</p>
+          <Button asChild>
+            <Link href="/courses">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              返回课程列表
+            </Link>
+          </Button>
+        </div>
+      </div>
+    )
   }
 
-  const levelLabels = {
-    beginner: "初级",
-    intermediate: "中级",
-    advanced: "高级",
+  const getLevelColor = (level: string) => {
+    switch (level) {
+      case "入门":
+        return "bg-blue-100 text-blue-800 border border-blue-200"
+      case "初级":
+        return "bg-green-100 text-green-800 border border-green-200"
+      case "中级":
+        return "bg-yellow-100 text-yellow-800 border border-yellow-200"
+      case "高级":
+        return "bg-orange-100 text-orange-800 border border-orange-200"
+      case "专家":
+        return "bg-purple-100 text-purple-800 border border-purple-200"
+      default:
+        return "bg-gray-100 text-gray-800 border border-gray-200"
+    }
   }
-
-  const levelColors = {
-    beginner: "bg-green-100 text-green-800",
-    intermediate: "bg-yellow-100 text-yellow-800",
-    advanced: "bg-red-100 text-red-800",
-  }
-
-  const totalLessons = course.chapters.reduce((total, chapter) => total + chapter.lessons.length, 0)
-  const completedLessons = course.chapters.reduce(
-    (total, chapter) => total + chapter.lessons.filter((lesson) => lesson.completed).length,
-    0,
-  )
-  const progress = Math.round((completedLessons / totalLessons) * 100)
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <BrandHeader />
+    <div className="min-h-screen bg-gray-50 pb-20">
+      <div className="container mx-auto px-4 py-6">
+        {/* 返回按钮 */}
+        <div className="mb-6">
+          <Button variant="ghost" className="text-gray-600 hover:text-gray-900" asChild>
+            <Link href="/courses">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              返回课程列表
+            </Link>
+          </Button>
+        </div>
 
-      <div className="container mx-auto px-4 py-8 pb-24 md:pb-8">
-        <div className="max-w-6xl mx-auto">
-          {/* 课程头部 */}
-          <div className="grid lg:grid-cols-3 gap-8 mb-8">
-            <div className="lg:col-span-2">
-              <div className="mb-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <Badge className={levelColors[course.level]}>{levelLabels[course.level]}</Badge>
-                  <Badge variant="outline">{course.category}</Badge>
+        {/* 课程头部 */}
+        <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+          <div className="relative h-64 sm:h-80">
+            <img src={course.image || "/placeholder.svg"} alt={course.title} className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+              <div className="p-6 text-white w-full">
+                <div className="flex flex-wrap gap-2 mb-3">
+                  <Badge className={getLevelColor(course.level)}>{course.level}</Badge>
+                  <Badge className="bg-white text-gray-800">{course.price}</Badge>
+                  {course.isNew && <Badge className="bg-blue-600 text-white">新课</Badge>}
                 </div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-4">{course.title}</h1>
-                <p className="text-lg text-gray-600 mb-4">{course.description}</p>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-4 mb-6">
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm text-gray-600">{course.instructor}</span>
+                <h1 className="text-2xl sm:text-3xl font-bold mb-2">{course.title}</h1>
+                <p className="text-gray-200 mb-4">{course.description}</p>
+                <div className="flex flex-wrap items-center gap-4 text-sm">
+                  <div className="flex items-center">
+                    <Clock className="h-4 w-4 mr-1" />
+                    {course.duration}
+                  </div>
+                  <div className="flex items-center">
+                    <Users className="h-4 w-4 mr-1" />
+                    {course.students.toLocaleString()}人学习
+                  </div>
+                  <div className="flex items-center">
+                    <Star className="h-4 w-4 mr-1 text-yellow-400" />
+                    {course.rating}分
+                  </div>
+                  <div className="flex items-center">
+                    <BookOpen className="h-4 w-4 mr-1" />
+                    {course.chapters}章节
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm text-gray-600">{course.duration}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm text-gray-600">{course.students.toLocaleString()}名学员</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                  <span className="text-sm text-gray-600">
-                    {course.rating} ({course.reviewCount}条评价)
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                {course.tags.map((tag, index) => (
-                  <Badge key={index} variant="secondary">
-                    {tag}
-                  </Badge>
-                ))}
               </div>
             </div>
+          </div>
 
-            {/* 课程卡片 */}
-            <div className="lg:col-span-1">
-              <Card className="sticky top-4">
-                <div className="aspect-video relative overflow-hidden rounded-t-lg">
-                  <Image
-                    src={course.image || "/placeholder.svg"}
-                    alt={course.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
-                  <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                    <Button size="lg" className="rounded-full w-16 h-16">
-                      <Play className="h-6 w-6" />
-                    </Button>
+          {/* 操作栏 */}
+          <div className="border-t border-gray-200 bg-gray-50 p-4">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center">
+                <img
+                  src="/placeholder.svg?height=40&width=40"
+                  alt={course.instructor}
+                  className="w-10 h-10 rounded-full mr-3"
+                />
+                <div>
+                  <p className="font-medium text-gray-900">{course.instructor}</p>
+                  <p className="text-sm text-gray-600">课程讲师</p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="rounded-full"
+                  onClick={() => setIsFavorite(!isFavorite)}
+                >
+                  <Heart className={`h-5 w-5 ${isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"}`} />
+                </Button>
+                <Button variant="outline" size="icon" className="rounded-full">
+                  <Share2 className="h-5 w-5 text-gray-600" />
+                </Button>
+                <Button variant="outline" size="icon" className="rounded-full">
+                  <Download className="h-5 w-5 text-gray-600" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 主要内容 */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* 左侧内容 */}
+          <div className="lg:col-span-2">
+            <Tabs defaultValue="overview" className="mb-6">
+              <TabsList className="grid grid-cols-4 mb-4">
+                <TabsTrigger value="overview">课程概览</TabsTrigger>
+                <TabsTrigger value="curriculum">课程大纲</TabsTrigger>
+                <TabsTrigger value="instructor">讲师介绍</TabsTrigger>
+                <TabsTrigger value="reviews">学员评价</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="overview" className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-xl font-bold text-gray-800 mb-4">课程介绍</h2>
+                <p className="text-gray-700 mb-6">{course.description}</p>
+
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">课程亮点</h3>
+                <ul className="space-y-2 mb-6">
+                  {course.highlights.map((highlight, index) => (
+                    <li key={index} className="flex items-start">
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                      <span className="text-gray-700">{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {course.objectives && (
+                  <>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3">学习目标</h3>
+                    <ul className="space-y-2 mb-6">
+                      {course.objectives.map((objective, index) => (
+                        <li key={index} className="flex items-start">
+                          <CheckCircle className="h-5 w-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" />
+                          <span className="text-gray-700">{objective}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+
+                {course.prerequisites && (
+                  <>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3">课程前提</h3>
+                    <ul className="space-y-2 mb-6">
+                      {course.prerequisites.map((prerequisite, index) => (
+                        <li key={index} className="flex items-start">
+                          <FileText className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0 mt-0.5" />
+                          <span className="text-gray-700">{prerequisite}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">适合人群</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
+                    <h4 className="font-medium text-blue-800 mb-2">AI初学者</h4>
+                    <p className="text-sm text-gray-700">希望了解AI基础知识和应用场景的初学者</p>
+                  </div>
+                  <div className="bg-green-50 border border-green-100 rounded-lg p-4">
+                    <h4 className="font-medium text-green-800 mb-2">开发人员</h4>
+                    <p className="text-sm text-gray-700">想要将AI技术应用到实际项目中的开发者</p>
+                  </div>
+                  <div className="bg-purple-50 border border-purple-100 rounded-lg p-4">
+                    <h4 className="font-medium text-purple-800 mb-2">产品经理</h4>
+                    <p className="text-sm text-gray-700">需要了解AI产品规划和设计的产品人员</p>
+                  </div>
+                  <div className="bg-yellow-50 border border-yellow-100 rounded-lg p-4">
+                    <h4 className="font-medium text-yellow-800 mb-2">企业管理者</h4>
+                    <p className="text-sm text-gray-700">希望了解AI技术如何赋能企业的管理人员</p>
                   </div>
                 </div>
-                <CardContent className="p-6">
-                  <div className="text-center mb-4">
-                    <div className="text-3xl font-bold text-gray-900">¥{course.price}</div>
-                    {course.originalPrice && (
-                      <div className="text-lg text-gray-500 line-through">¥{course.originalPrice}</div>
-                    )}
+
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {course.tags.map((tag, index) => (
+                    <Badge key={index} variant="outline" className="text-gray-700 border-gray-300">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="curriculum" className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-xl font-bold text-gray-800 mb-4">课程大纲</h2>
+                <p className="text-gray-600 mb-6">
+                  本课程包含 {course.chapters} 个章节，总时长 {course.duration}
+                </p>
+
+                {course.syllabus ? (
+                  <div className="space-y-4">
+                    {course.syllabus.map((section, index) => (
+                      <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
+                        <div className="bg-gray-50 p-4 flex items-center justify-between">
+                          <h3 className="font-medium text-gray-800">{section.title}</h3>
+                          <Button variant="ghost" size="sm" onClick={() => setIsExpanded(!isExpanded)}>
+                            {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                          </Button>
+                        </div>
+                        {isExpanded && (
+                          <div className="p-4 space-y-2">
+                            {section.lessons.map((lesson, lessonIndex) => (
+                              <div
+                                key={lessonIndex}
+                                className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0"
+                              >
+                                <div className="flex items-center">
+                                  <Play className="h-4 w-4 text-gray-500 mr-2" />
+                                  <span className="text-gray-700">{lesson.title}</span>
+                                </div>
+                                <span className="text-sm text-gray-500">{lesson.duration}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <FileText className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                    <h3 className="text-lg font-medium text-gray-800 mb-1">课程大纲准备中</h3>
+                    <p className="text-gray-600">详细课程大纲即将上线，敬请期待</p>
+                  </div>
+                )}
+              </TabsContent>
+
+              <TabsContent value="instructor" className="bg-white rounded-lg shadow-sm p-6">
+                <div className="flex items-center mb-6">
+                  <img
+                    src="/placeholder.svg?height=80&width=80"
+                    alt={course.instructor}
+                    className="w-20 h-20 rounded-full mr-4"
+                  />
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-800 mb-1">{course.instructor}</h2>
+                    <p className="text-gray-600 mb-2">AI领域资深专家</p>
+                    <div className="flex items-center">
+                      <Star className="h-4 w-4 text-yellow-500 mr-1" />
+                      <span className="text-gray-700 mr-3">4.9 讲师评分</span>
+                      <Users className="h-4 w-4 text-blue-500 mr-1" />
+                      <span className="text-gray-700">5000+ 学员</span>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-gray-700 mb-6">
+                  {course.instructor}
+                  是人工智能领域的资深专家，拥有超过10年的行业经验。曾在多家知名科技公司担任技术负责人，
+                  参与开发了多个大型AI项目。擅长将复杂的AI概念转化为易于理解的内容，帮助学员快速掌握AI技术。
+                </p>
+
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">专业领域</h3>
+                <div className="flex flex-wrap gap-2 mb-6">
+                  <Badge className="bg-blue-100 text-blue-800 border border-blue-200">大语言模型</Badge>
+                  <Badge className="bg-blue-100 text-blue-800 border border-blue-200">自然语言处理</Badge>
+                  <Badge className="bg-blue-100 text-blue-800 border border-blue-200">AI应用开发</Badge>
+                  <Badge className="bg-blue-100 text-blue-800 border border-blue-200">企业AI解决方案</Badge>
+                </div>
+
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">其他课程</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {courseData.slice(0, 2).map((relatedCourse) => (
+                    <Card key={relatedCourse.id} className="overflow-hidden">
+                      <div className="h-32 overflow-hidden">
+                        <img
+                          src={relatedCourse.image || "/placeholder.svg"}
+                          alt={relatedCourse.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <CardContent className="p-4">
+                        <h4 className="font-medium text-gray-800 mb-1 line-clamp-1">{relatedCourse.title}</h4>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">{relatedCourse.duration}</span>
+                          <div className="flex items-center">
+                            <Star className="h-3 w-3 text-yellow-500 mr-1" />
+                            <span>{relatedCourse.rating}</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="reviews" className="bg-white rounded-lg shadow-sm p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-bold text-gray-800">学员评价</h2>
+                  <div className="flex items-center">
+                    <div className="text-3xl font-bold text-gray-900 mr-2">{course.rating}</div>
+                    <div>
+                      <div className="flex items-center mb-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className={`h-5 w-5 ${
+                              star <= Math.floor(course.rating) ? "text-yellow-500 fill-yellow-500" : "text-gray-300"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <div className="text-sm text-gray-600">{course.students} 名学员</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-6 mb-6">
+                  {/* 模拟评价 */}
+                  <div className="border-b border-gray-200 pb-6">
+                    <div className="flex items-center mb-3">
+                      <img
+                        src="/placeholder.svg?height=40&width=40"
+                        alt="学员头像"
+                        className="w-10 h-10 rounded-full mr-3"
+                      />
+                      <div>
+                        <h4 className="font-medium text-gray-800">张同学</h4>
+                        <div className="flex items-center">
+                          <div className="flex">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className={`h-4 w-4 ${star <= 5 ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}`}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-sm text-gray-600 ml-2">2天前</span>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-gray-700">
+                      课程内容非常实用，讲师讲解清晰易懂。通过这门课程，我对AI的理解有了质的提升。
+                      特别是实战项目部分，让我能够将理论知识应用到实际场景中。强烈推荐！
+                    </p>
                   </div>
 
-                  {progress > 0 && (
-                    <div className="mb-4">
-                      <div className="flex justify-between text-sm text-gray-600 mb-1">
-                        <span>学习进度</span>
-                        <span>{progress}%</span>
+                  <div className="border-b border-gray-200 pb-6">
+                    <div className="flex items-center mb-3">
+                      <img
+                        src="/placeholder.svg?height=40&width=40"
+                        alt="学员头像"
+                        className="w-10 h-10 rounded-full mr-3"
+                      />
+                      <div>
+                        <h4 className="font-medium text-gray-800">李工程师</h4>
+                        <div className="flex items-center">
+                          <div className="flex">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className={`h-4 w-4 ${star <= 4 ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}`}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-sm text-gray-600 ml-2">1周前</span>
+                        </div>
                       </div>
-                      <Progress value={progress} className="h-2" />
                     </div>
-                  )}
+                    <p className="text-gray-700">
+                      作为一名开发人员，这门课程帮助我快速掌握了AI应用开发的核心技能。
+                      课程结构合理，从基础到进阶循序渐进，非常适合有编程基础的同学学习。
+                    </p>
+                  </div>
 
-                  <div className="space-y-3">
-                    <Button className="w-full" size="lg">
-                      {progress > 0 ? "继续学习" : "立即购买"}
-                    </Button>
-                    <Button variant="outline" className="w-full bg-transparent">
-                      <Heart className="mr-2 h-4 w-4" />
-                      收藏课程
-                    </Button>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm" className="flex-1 bg-transparent">
-                        <Share2 className="mr-2 h-4 w-4" />
-                        分享
-                      </Button>
-                      <Button variant="outline" size="sm" className="flex-1 bg-transparent">
-                        <Download className="mr-2 h-4 w-4" />
-                        下载
-                      </Button>
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <img
+                        src="/placeholder.svg?height=40&width=40"
+                        alt="学员头像"
+                        className="w-10 h-10 rounded-full mr-3"
+                      />
+                      <div>
+                        <h4 className="font-medium text-gray-800">王产品经理</h4>
+                        <div className="flex items-center">
+                          <div className="flex">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className={`h-4 w-4 ${star <= 5 ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}`}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-sm text-gray-600 ml-2">2周前</span>
+                        </div>
+                      </div>
                     </div>
+                    <p className="text-gray-700">
+                      虽然我不是技术背景，但这门课程让我对AI技术有了深入的理解。
+                      现在我能够更好地与技术团队沟通，制定更合理的产品规划。课程内容很有价值！
+                    </p>
+                  </div>
+                </div>
+
+                <Button variant="outline" className="w-full">
+                  <MessageSquare className="h-4 w-4 mr-2" />
+                  查看更多评价
+                </Button>
+              </TabsContent>
+            </Tabs>
+          </div>
+
+          {/* 右侧侧边栏 */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-6 space-y-6">
+              {/* 学习进度 */}
+              {course.progress > 0 && (
+                <Card className="bg-white shadow-sm">
+                  <CardContent className="p-6">
+                    <h3 className="font-semibold text-gray-800 mb-3">学习进度</h3>
+                    <div className="mb-3">
+                      <div className="flex justify-between text-sm mb-1">
+                        <span className="text-gray-600">已完成</span>
+                        <span className="text-gray-800 font-medium">{course.progress}%</span>
+                      </div>
+                      <Progress value={course.progress} className="h-2" />
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      您已完成 {Math.floor((course.progress / 100) * course.chapters)} / {course.chapters} 章节
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* 开始学习 */}
+              <Card className="bg-white shadow-sm">
+                <CardContent className="p-6">
+                  <div className="text-center mb-4">
+                    <div className="text-2xl font-bold text-gray-900 mb-1">{course.price}</div>
+                    {course.price !== "免费" && <div className="text-sm text-gray-600 line-through">原价 ¥999</div>}
+                  </div>
+
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white mb-3">
+                    <Play className="h-4 w-4 mr-2" />
+                    {course.progress > 0 ? "继续学习" : "立即开始"}
+                  </Button>
+
+                  <Button variant="outline" className="w-full mb-4">
+                    <FileText className="h-4 w-4 mr-2" />
+                    免费试听
+                  </Button>
+
+                  <div className="text-center">
+                    <p className="text-xs text-gray-600 mb-2">30天无理由退款保障</p>
+                    <div className="flex items-center justify-center text-xs text-gray-600">
+                      <Award className="h-3 w-3 mr-1" />
+                      完成课程可获得认证证书
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* 课程信息 */}
+              <Card className="bg-white shadow-sm">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold text-gray-800 mb-4">课程信息</h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">课程时长</span>
+                      <span className="text-gray-800">{course.duration}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">章节数量</span>
+                      <span className="text-gray-800">{course.chapters}章</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">学习人数</span>
+                      <span className="text-gray-800">{course.students.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">课程评分</span>
+                      <div className="flex items-center">
+                        <Star className="h-4 w-4 text-yellow-500 mr-1" />
+                        <span className="text-gray-800">{course.rating}</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">难度级别</span>
+                      <Badge className={getLevelColor(course.level)}>{course.level}</Badge>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">课程分类</span>
+                      <span className="text-gray-800">{course.category}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* 相关课程推荐 */}
+              <Card className="bg-white shadow-sm">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold text-gray-800 mb-4">相关课程推荐</h3>
+                  <div className="space-y-4">
+                    {courseData
+                      .filter((c) => c.id !== course.id && c.category === course.category)
+                      .slice(0, 3)
+                      .map((relatedCourse) => (
+                        <Link
+                          key={relatedCourse.id}
+                          href={`/courses/${relatedCourse.id}`}
+                          className="block hover:bg-gray-50 rounded-lg p-2 transition-colors"
+                        >
+                          <div className="flex">
+                            <img
+                              src={relatedCourse.image || "/placeholder.svg"}
+                              alt={relatedCourse.title}
+                              className="w-16 h-12 object-cover rounded mr-3"
+                            />
+                            <div className="flex-1">
+                              <h4 className="text-sm font-medium text-gray-800 line-clamp-2 mb-1">
+                                {relatedCourse.title}
+                              </h4>
+                              <div className="flex items-center justify-between text-xs">
+                                <span className="text-gray-600">{relatedCourse.price}</span>
+                                <div className="flex items-center">
+                                  <Star className="h-3 w-3 text-yellow-500 mr-1" />
+                                  <span className="text-gray-600">{relatedCourse.rating}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
                   </div>
                 </CardContent>
               </Card>
             </div>
           </div>
-
-          {/* 课程详情 */}
-          <Tabs defaultValue="overview" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="overview">课程概述</TabsTrigger>
-              <TabsTrigger value="curriculum">课程大纲</TabsTrigger>
-              <TabsTrigger value="instructor">讲师介绍</TabsTrigger>
-              <TabsTrigger value="reviews">学员评价</TabsTrigger>
-            </TabsList>
-
-            {/* 课程概述 */}
-            <TabsContent value="overview" className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Target className="h-5 w-5 text-blue-600" />
-                      学习目标
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-2">
-                      {course.learningOutcomes.map((outcome, index) => (
-                        <li key={index} className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm">{outcome}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <BookOpen className="h-5 w-5 text-green-600" />
-                      课程要求
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-2">
-                      {course.requirements.map((requirement, index) => (
-                        <li key={index} className="flex items-start gap-2">
-                          <div className="w-1 h-1 bg-gray-400 rounded-full mt-2 flex-shrink-0"></div>
-                          <span className="text-sm">{requirement}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              </div>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Zap className="h-5 w-5 text-purple-600" />
-                    课程特色
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid md:grid-cols-2 gap-3">
-                    {course.features.map((feature, index) => (
-                      <div key={index} className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                        <span className="text-sm">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* 课程大纲 */}
-            <TabsContent value="curriculum" className="space-y-4">
-              {course.chapters.map((chapter, index) => (
-                <Card key={chapter.id}>
-                  <CardHeader>
-                    <div className="flex justify-between items-center">
-                      <CardTitle className="text-lg">
-                        第{index + 1}章：{chapter.title}
-                      </CardTitle>
-                      <Badge variant="outline">{chapter.duration}</Badge>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      {chapter.lessons.map((lesson, lessonIndex) => (
-                        <div
-                          key={lesson.id}
-                          className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50"
-                        >
-                          <div className="flex items-center gap-3">
-                            {lesson.completed ? (
-                              <CheckCircle className="h-4 w-4 text-green-500" />
-                            ) : (
-                              <Play className="h-4 w-4 text-gray-400" />
-                            )}
-                            <span className="text-sm font-medium">{lesson.title}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Clock className="h-3 w-3 text-gray-400" />
-                            <span className="text-xs text-gray-500">{lesson.duration}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </TabsContent>
-
-            {/* 讲师介绍 */}
-            <TabsContent value="instructor">
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <Image
-                      src={course.instructorAvatar || "/placeholder.svg"}
-                      alt={course.instructor}
-                      width={80}
-                      height={80}
-                      className="rounded-full"
-                    />
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold mb-2">{course.instructor}</h3>
-                      <p className="text-gray-600 mb-4">
-                        资深AI专家，拥有10年以上人工智能领域研发经验，曾在多家知名科技公司担任技术负责人。
-                        专注于机器学习、深度学习和大语言模型的研究与应用，发表过多篇高质量学术论文。
-                      </p>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                        <div>
-                          <div className="text-2xl font-bold text-blue-600">50+</div>
-                          <div className="text-sm text-gray-600">授课课程</div>
-                        </div>
-                        <div>
-                          <div className="text-2xl font-bold text-green-600">10万+</div>
-                          <div className="text-sm text-gray-600">学员数量</div>
-                        </div>
-                        <div>
-                          <div className="text-2xl font-bold text-purple-600">4.9</div>
-                          <div className="text-sm text-gray-600">平均评分</div>
-                        </div>
-                        <div>
-                          <div className="text-2xl font-bold text-orange-600">10年</div>
-                          <div className="text-sm text-gray-600">教学经验</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* 学员评价 */}
-            <TabsContent value="reviews" className="space-y-4">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h3 className="text-xl font-bold">学员评价</h3>
-                  <div className="flex items-center gap-2 mt-1">
-                    <div className="flex items-center">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star
-                          key={star}
-                          className={`h-4 w-4 ${
-                            star <= Math.floor(course.rating) ? "text-yellow-500 fill-current" : "text-gray-300"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-sm text-gray-600">
-                      {course.rating} 分 · {course.reviewCount} 条评价
-                    </span>
-                  </div>
-                </div>
-                <Button variant="outline">
-                  <MessageCircle className="mr-2 h-4 w-4" />
-                  写评价
-                </Button>
-              </div>
-
-              <div className="space-y-4">
-                {course.reviews.map((review) => (
-                  <Card key={review.id}>
-                    <CardContent className="p-4">
-                      <div className="flex items-start gap-3">
-                        <Image
-                          src={review.avatar || "/placeholder.svg"}
-                          alt={review.user}
-                          width={40}
-                          height={40}
-                          className="rounded-full"
-                        />
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between mb-2">
-                            <div>
-                              <div className="font-medium">{review.user}</div>
-                              <div className="flex items-center gap-2">
-                                <div className="flex items-center">
-                                  {[1, 2, 3, 4, 5].map((star) => (
-                                    <Star
-                                      key={star}
-                                      className={`h-3 w-3 ${
-                                        star <= review.rating ? "text-yellow-500 fill-current" : "text-gray-300"
-                                      }`}
-                                    />
-                                  ))}
-                                </div>
-                                <span className="text-xs text-gray-500">{review.date}</span>
-                              </div>
-                            </div>
-                          </div>
-                          <p className="text-gray-700">{review.content}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
         </div>
       </div>
     </div>

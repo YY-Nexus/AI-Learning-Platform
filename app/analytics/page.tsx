@@ -1,26 +1,12 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { 
-  TrendingUp, 
-  ArrowLeft, 
-  Download, 
-  Filter, 
-  RefreshCw, 
-  BarChart2, 
-  PieChart,  // 未使用，可考虑删除
-  Star, 
-  Clock, 
-  CheckCircle, 
-  ArrowUpRight, 
-  BookOpen,
-  ArrowRight  // 补充缺失的导入
-} from "lucide-react";
-import Link from "next/link";
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { TrendingUp, ArrowLeft, Download, Filter, RefreshCw, BarChart2, PieChart, Star, Clock, CheckCircle, ArrowUpRight, BookOpen } from "lucide-react"
+import Link from "next/link"
 
 export default function AnalyticsPage() {
-  const [timeRange, setTimeRange] = useState('30d');
+  const [timeRange, setTimeRange] = useState('30d')
 
   // 学习时长数据
   const studyTimeData = [
@@ -38,7 +24,7 @@ export default function AnalyticsPage() {
     { date: '03-12', hours: 2.7 },
     { date: '03-13', hours: 3.9 },
     { date: '03-14', hours: 2.4 },
-  ];
+  ]
 
   // 课程完成度数据
   const courseProgressData = [
@@ -48,7 +34,7 @@ export default function AnalyticsPage() {
     { name: 'AI伦理', progress: 45, category: '理论' },
     { name: '计算机视觉', progress: 30, category: '专业' },
     { name: '自然语言处理', progress: 75, category: '专业' },
-  ];
+  ]
 
   // 技能分布数据
   const skillDistributionData = [
@@ -57,7 +43,7 @@ export default function AnalyticsPage() {
     { name: 'Prompt工程', value: 90, color: '#10b981' },
     { name: '数据分析', value: 65, color: '#f59e0b' },
     { name: 'AI伦理', value: 55, color: '#ef4444' },
-  ];
+  ]
 
   // 学习效率数据
   const efficiencyData = [
@@ -65,9 +51,9 @@ export default function AnalyticsPage() {
     { week: '第2周', efficiency: 82, focus: 85, retention: 78 },
     { week: '第3周', efficiency: 78, focus: 82, retention: 75 },
     { week: '第4周', efficiency: 88, focus: 90, retention: 85 },
-  ];
+  ]
 
-  const COLORS = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444'];
+  const COLORS = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444']
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-cyan-50 pb-20">
@@ -240,6 +226,7 @@ export default function AnalyticsPage() {
             </div>
           </div>
           <div className="h-80">
+            {/* 这里将放置学习时长趋势图表 */}
             <div className="flex items-center justify-center h-full">
               <svg viewBox="0 0 600 300" className="w-full h-full">
                 {/* 坐标轴 */}
@@ -271,12 +258,10 @@ export default function AnalyticsPage() {
                 })}
                 
                 {/* 趋势线 */}
-                <path 
-                  d={studyTimeData.map((data, index) => `M${50 + index * 35},${250 - data.hours * 40}`).join(' L')} 
-                  stroke="#3b82f6" 
-                  strokeWidth="2" 
-                  fill="none" 
-                />
+                <path d={studyTimeData.map((data, index) => 
+                  `M${50 + index * 35},${250 - data.hours * 40}`
+                ).join(' L')} 
+                stroke="#3b82f6" strokeWidth="2" fill="none" />
               </svg>
             </div>
           </div>
@@ -308,10 +293,7 @@ export default function AnalyticsPage() {
                     <span className="text-sm font-medium text-gray-800">{course.progress}%</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full" 
-                      style={{ width: `${course.progress}%` }}
-                    ></div>
+                    <div className={`bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full`} style={{ width: `${course.progress}%` }}></div>
                   </div>
                 </div>
               ))}
@@ -330,9 +312,7 @@ export default function AnalyticsPage() {
               <svg viewBox="0 0 240 240" className="w-full h-64">
                 {/* 技能圆环图 */}
                 {skillDistributionData.map((skill, index) => {
-                  const startAngle = index === 0 
-                    ? 0 
-                    : skillDistributionData.slice(0, index).reduce((sum, s) => sum + s.value, 0) * 3.6;
+                  const startAngle = index === 0 ? 0 : skillDistributionData.slice(0, index).reduce((sum, s) => sum + s.value, 0) * 3.6;
                   const endAngle = startAngle + skill.value * 3.6;
                   
                   const startX = 120 + 80 * Math.cos((startAngle - 90) * Math.PI / 180);
@@ -501,5 +481,5 @@ export default function AnalyticsPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

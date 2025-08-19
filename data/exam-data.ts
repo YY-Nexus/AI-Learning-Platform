@@ -16,10 +16,9 @@ export interface Exam {
   title: string
   description: string
   duration: number // 分钟
-  questionCount: number
   difficulty: string
   category: string
-  image?: string
+  questions: ExamQuestion[]
 }
 
 // AI基础知识测试 - 30道题
@@ -363,7 +362,7 @@ const aiBasicsQuestions: ExamQuestion[] = [
   },
 ]
 
-// Prompt工程师认证考试 - 45道题
+// Prompt工程师认证考试 - 20道题
 const promptEngineeringQuestions: ExamQuestion[] = [
   // 基础概念 (5题)
   {
@@ -593,7 +592,7 @@ const promptEngineeringQuestions: ExamQuestion[] = [
   },
 ]
 
-// AI应用开发综合测评 - 60道题
+// AI应用开发综合测评 - 28道题
 const aiDevelopmentQuestions: ExamQuestion[] = [
   // 系统架构设计 (7题)
   {
@@ -912,49 +911,47 @@ const aiDevelopmentQuestions: ExamQuestion[] = [
 ]
 
 // 导出所有考试数据
-const exams: Exam[] = [
+export const examData: Exam[] = [
   {
-    id: "ai-basics",
-    title: "AI基础知识考试",
-    description: "测试您对人工智能基础概念的理解",
+    id: "1",
+    title: "AI基础知识测试",
+    description:
+      "全面测试您对人工智能各个领域的理解，包括机器学习、深度学习、计算机视觉、自然语言处理、AI伦理等核心概念",
     duration: 60,
-    questionCount: 30,
-    difficulty: "初级",
-    category: "基础",
-    image: "/images/ai-basics-exam.png",
+    difficulty: "初级-中级",
+    category: "基础理论",
+    questions: aiBasicsQuestions,
   },
   {
-    id: "prompt-engineering",
-    title: "提示工程师认证考试",
-    description: "评估您的提示工程技能和最佳实践",
+    id: "2",
+    title: "Prompt工程师认证考试",
+    description: "深度评估您的Prompt设计能力，涵盖基础概念、高级技巧、安全防护、商业应用和多模态应用等专业技能",
     duration: 90,
-    questionCount: 45,
-    difficulty: "中级",
-    category: "专业",
-    image: "/images/prompt-engineer-exam.png",
+    difficulty: "中级-高级",
+    category: "Prompt工程",
+    questions: promptEngineeringQuestions,
   },
   {
-    id: "ai-development",
-    title: "AI开发工程师考试",
-    description: "综合测试AI开发技能和项目经验",
+    id: "3",
+    title: "AI应用开发综合测评",
+    description:
+      "全方位测试AI应用开发技能，包括系统架构设计、模型训练部署、性能优化、安全防护、工程实践等企业级开发能力",
     duration: 120,
-    questionCount: 60,
     difficulty: "高级",
-    category: "开发",
-    image: "/images/ai-development-exam.png",
+    category: "开发实战",
+    questions: aiDevelopmentQuestions,
   },
 ]
 
 // 获取所有考试
-export async function getAllExams(): Promise<Exam[]> {
-  return exams
+export function getAllExams(): Exam[] {
+  return examData
 }
 
 // 根据ID获取考试
-export async function getExamById(id: string): Promise<Exam | null> {
-  const exam = exams.find((e) => e.id === id)
-  return exam || null
+export function getExamById(id: string): Exam | undefined {
+  return examData.find((exam) => exam.id === id)
 }
 
 // 确保这些导出存在
-export { exams as default }
+export { examData as default }
